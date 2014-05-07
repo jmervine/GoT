@@ -1,0 +1,115 @@
+{{with .PAst}}{{node $ .}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with .PDoc}}{{if not $.IsMain}}
+# Go Test
+
+<center><img src="http://cdn.mervine.net/GoT.jpg" /></center>
+
+#### Simple Assertion wrapper for Go's built in "testing" package.
+
+GoT is designed to be as simple and unintrusive as possible while adding basic Assert and Refute methods to assist in writing clean and clean tests quickly.
+
+##### See [examples](_example) for detailed assertion usage.
+
+## Documentation
+
+```go
+import "github.com/jmervine/goperf"
+```{{else}}
+{{end}}{{comment_text .Doc "" ""}}
+{{example_text $ "" "##### "}}{{/*
+
+---------------------------------------
+
+*/}}{{with .Consts}}
+### Constants
+
+{{range .}}```go
+{{node $ .Decl}}
+```
+
+{{comment_text .Doc "" ""}}
+{{end}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with .Vars}}
+### Variables
+
+{{range .}}```go
+{{node $ .Decl}}
+```
+
+{{comment_text .Doc "" ""}}
+{{end}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with .Types}}
+### Types
+
+{{range .}}#### {{.Name}}
+
+```go
+{{$tname := .Name}}{{node $ .Decl}}
+```
+{{range .Consts}}```go
+{{node $ .Decl}}
+```
+{{comment_text .Doc "" ""}}
+{{end}}
+{{range .Vars}}{{node $ .Decl}}
+{{comment_text .Doc "" ""}}
+{{end}}
+{{example_text $ .Name "##### "}}
+{{range .Funcs}}#### {{.Name}}
+
+```go
+{{node $ .Decl}}
+```
+{{comment_text .Doc "" ""}}
+{{example_text $ .Name  "##### "}}
+{{end}}{{range .Methods}}{{/* methods */}}#### {{.Name}}
+
+```go
+{{node $ .Decl}}
+```
+{{comment_text .Doc "" ""}}
+{{$name := printf "%s_%s" $tname .Name}}
+{{if example_text $ $name ""}}
+{{example_text $ $name "##### "}}
+{{end}}
+{{end}}{{end}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with .Funcs}}
+{{range .}}#### {{.Name}}
+
+```go
+{{node $ .Decl}}
+```
+{{comment_text .Doc "" ""}}
+{{example_text $ .Name "##### "}}
+{{end}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with $.Notes}}
+{{range $marker, $content := .}}
+{{noteTitle $marker}}s
+
+{{range $content}}{{comment_text . "" ""}}
+{{end}}{{end}}{{end}}{{end}}{{/*
+
+---------------------------------------
+
+*/}}{{with .Dirs}}
+## Subdirectories
+{{if $.DirFlat}}{{range .List}}{{if .HasPkg}}
+	{{.Path}}{{end}}{{end}}
+{{else}}{{range .List}}
+	{{repeat `. ` .Depth}}{{.Name}}{{end}}
+{{end}}{{end}}
