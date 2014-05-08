@@ -1,4 +1,4 @@
-package got
+package GoT
 
 import (
     "testing"

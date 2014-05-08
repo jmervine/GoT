@@ -15,7 +15,7 @@ Setup Examples:
     )
 
     func TestFoo(T *testing.T) {
-       t := got.Go(T)
+       t := GoT.Go(T)
        t.Assert(true, "should be true")
     }
 
@@ -28,7 +28,7 @@ Setup Examples:
         "testing"
     )
 
-    var Go := got.Go
+    var Go := GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
        Go(T).Refute(false, "should be false")
@@ -48,7 +48,7 @@ Setup Examples:
     }
 
 */
-package got
+package GoT
 
 import (
     "fmt"

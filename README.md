@@ -30,7 +30,7 @@ Setup Examples:
         "testing"
     )
     func TestFoo(T *testing.T) {
-       t := got.Go(T)
+       t := GoT.Go(T)
        t.Assert(true, "should be true")
     }
     // ------------------------------------------------ //
@@ -40,7 +40,7 @@ Setup Examples:
         "github.com/jmervine/GoT"
         "testing"
     )
-    var Go := got.Go
+    var Go := GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
        Go(T).Refute(false, "should be false")
