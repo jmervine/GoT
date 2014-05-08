@@ -1,5 +1,7 @@
 package got
 
+// Simple Assertion wrapper for Go's built in "testing" package.
+
 import (
     "fmt"
     "path"
