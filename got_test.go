@@ -87,69 +87,136 @@ func TestRefuteLength(T *testing.T) {
 }
 
 /* Intentionally Fail */
-func TestAllFailureConditions(T *testing.T) {
-    t := Go(T)
+//func TestAllFailureConditions(T *testing.T) {
+//Go(T).Assert(false, "Assert: should fail here.")
+//Go(T).Refute(true, "Refute: should fail here.")
 
-    t.Assert(false, "Assert: should fail here.")
-    t.Refute(true, "Refute: should fail here.")
+//Go(T).AssertEqual(1, 2, "AssertEqual: should fail here.")
+//Go(T).RefuteEqual(1, 1, "RefuteEqual: should fail here.")
 
-    t.AssertEqual(1, 2, "AssertEqual: should fail here.")
-    t.RefuteEqual(1, 1, "RefuteEqual: should fail here.")
+//Go(T).AssertDeepEqual(1, 1.0, "AssertDeepEqual: should fail here.")
+//Go(T).RefuteDeepEqual(1, 1, "RefuteDeepEqual: should fail here.")
 
-    t.AssertDeepEqual(1, 1.0, "AssertDeepEqual: should fail here.")
-    t.RefuteDeepEqual(1, 1, "RefuteDeepEqual: should fail here.")
+//Go(T).AssertNil(1, "AssertNil: should fail here.")
+//Go(T).RefuteNil(nil, "RefuteNil: should fail here.")
 
-    t.AssertNil(1, "AssertNil: should fail here.")
-    t.RefuteNil(nil, "RefuteNil: should fail here.")
+//Go(T).AssertLength("", 1, "AssertLength: should fail here.")
+//Go(T).RefuteLength("", 0, "RefuteLength: should fail here.")
+//}
 
-    t.AssertLength("", 1, "AssertLength: should fail here.")
-    t.RefuteLength("", 0, "RefuteLength: should fail here.")
+func ExampleGoT_Assert() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).Assert(true, "should be true")
+}
+
+func ExampleGoT_Refute() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).Refute(false, "should not be true")
+}
+
+func ExampleGoT_AssertEqual() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).AssertEqual(1, 1, "should equal")
+}
+
+func ExampleGoT_RefuteEqual() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).RefuteEqual(1, 2, "should not equal")
+}
+
+func ExampleGoT_AssertDeepEqual() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    a1 := []string{"a"}
+    a2 := []string{"a"}
+
+    Go(T).AssertDeepEqual(a1, a2, "should deep equal")
+}
+
+func ExampleGoT_RefuteDeepEqual() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    a1 := []string{"a"}
+    a2 := []string{"b"}
+
+    Go(T).RefuteDeepEqual(a1, a2, "should not deep equal")
+}
+
+func ExampleGoT_AssertNil() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).AssertNil(nil, "should be nil")
+}
+
+func ExampleGoT_RefuteNil() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).RefuteNil(1, "should not be nil")
+}
+
+func ExampleGoT_AssertLength() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).AssertLength("a", 1, "should be length")
+}
+
+func ExampleGoT_RefuteLength() {
+    // For example only, T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+    //
+    T := new(testing.T)
+
+    Go(T).RefuteLength("a", 0, "should not be length")
 }
 
 func ExampleGo() {
-    // file: foo_test.go
-    // ------------------------------------------------ //
+    // For example only, T comes from:
     //
-    // Simple:
+    //     func TestFoo(T *testing.T)
     //
-    // import (
-    //     "github.com/jmervine/GoT"
-    //     "testing"
-    // )
-    //
-    // func TestFoo(T *testing.T) {
-    //    t := got.Go(T)
-    //    t.Assert(true, "should be true")
-    // }
-    //
-    // ------------------------------------------------ //
-    //
-    // Global:
-    //
-    // import (
-    //     "github.com/jmervine/GoT"
-    //     "testing"
-    // )
-    //
-    // var Go := got.Go
-    // func TestFoo(T *testing.T) {
-    //    Go(T).Assert(true, "should be true")
-    //    Go(T).Refute(false, "should be false")
-    // }
-    //
-    // ------------------------------------------------ //
-    //
-    // Or:
-    //
-    // import (
-    //     . "github.com/jmervine/GoT"
-    //     "testing"
-    // )
-    //
-    // func TestFoo(T *testing.T) {
-    //    Go(T).Assert(true, "should be true")
-    //    Go(T).Refute(false, "should be false")
-    // }
-    //
-    // ------------------------------------------------ //
+    T := new(testing.T)
+
+    Go(T).Assert(true, "should be true")
+    Go(T).Refute(false, "should not be true")
 }

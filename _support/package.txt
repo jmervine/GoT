@@ -5,7 +5,9 @@
 */}}{{with .PDoc}}{{if not $.IsMain}}
 # Go Test
 
-<center><img src="http://cdn.mervine.net/GoT.jpg" /></center>
+[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
+
+<center>![GoT](http://cdn.mervine.net/GoT.jpg)]</center>
 
 #### Simple Assertion wrapper for Go's built in "testing" package.
 
@@ -18,7 +20,9 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 ```go
 import "github.com/jmervine/GoT"
 ```{{else}}
-{{end}}{{comment_text .Doc "" ""}}
+{{end}}
+
+{{comment_text .Doc "" "    "}}
 {{example_text $ "" "##### "}}{{/*
 
 ---------------------------------------

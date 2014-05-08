@@ -1,7 +1,9 @@
 
 # Go Test
 
-<center><img src="http://cdn.mervine.net/GoT.jpg" /></center>
+[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
+
+<center>![GoT](http://cdn.mervine.net/GoT.jpg)]</center>
 
 #### Simple Assertion wrapper for Go's built in "testing" package.
 
@@ -14,6 +16,48 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 ```go
 import "github.com/jmervine/GoT"
 ```
+
+Simple Assertion wrapper for Go's built in "testing" package.
+
+GoT is designed to be as simple and unintrusive as possible while adding basic
+Assert and Refute methods to assist in writing clean and clean tests quickly.
+
+Setup Examples:
+
+    // ------------------------------------------------ //
+    // Simple:
+    import (
+        "github.com/jmervine/GoT"
+        "testing"
+    )
+    func TestFoo(T *testing.T) {
+       t := got.Go(T)
+       t.Assert(true, "should be true")
+    }
+    // ------------------------------------------------ //
+    // Global:
+    //
+    import (
+        "github.com/jmervine/GoT"
+        "testing"
+    )
+    var Go := got.Go
+    func TestFoo(T *testing.T) {
+       Go(T).Assert(true, "should be true")
+       Go(T).Refute(false, "should be false")
+    }
+    // ------------------------------------------------ //
+    // Authors Perfered:
+    //
+    import (
+        . "github.com/jmervine/GoT"
+        "testing"
+    )
+    func TestFoo(T *testing.T) {
+       Go(T).Assert(true, "should be true")
+       Go(T).Refute(false, "should be false")
+    }
+
 
 ### Types
 
@@ -32,62 +76,35 @@ type GoT struct {
 ```go
 func Go(T *testing.T) *GoT
 ```
-Core "testing" wrapper to apply assertions.
+Go wraps "testing" to apply assertions.
 
 ##### Example:
-	// file: foo_test.go
-	// ------------------------------------------------ //
+	// For example only, T comes from:
 	//
-	// Simple:
+	//     func TestFoo(T *testing.T)
 	//
-	// import (
-	//     "github.com/jmervine/GoT"
-	//     "testing"
-	// )
-	//
-	// func TestFoo(T *testing.T) {
-	//    t := got.Go(T)
-	//    t.Assert(true, "should be true")
-	// }
-	//
-	// ------------------------------------------------ //
-	//
-	// Global:
-	//
-	// import (
-	//     "github.com/jmervine/GoT"
-	//     "testing"
-	// )
-	//
-	// var Go := got.Go
-	// func TestFoo(T *testing.T) {
-	//    Go(T).Assert(true, "should be true")
-	//    Go(T).Refute(false, "should be false")
-	// }
-	//
-	// ------------------------------------------------ //
-	//
-	// Or:
-	//
-	// import (
-	//     . "github.com/jmervine/GoT"
-	//     "testing"
-	// )
-	//
-	// func TestFoo(T *testing.T) {
-	//    Go(T).Assert(true, "should be true")
-	//    Go(T).Refute(false, "should be false")
-	// }
-	//
-	// ------------------------------------------------ //
+	T := new(testing.T)
+	
+	Go(T).Assert(true, "should be true")
+	Go(T).Refute(false, "should not be true")
 
 #### Assert
 
 ```go
 func (t *GoT) Assert(a bool, m string)
 ```
-Check for true.
+Assert checks for true.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).Assert(true, "should be true")
 
 
 #### AssertDeepEqual
@@ -95,8 +112,21 @@ Check for true.
 ```go
 func (t *GoT) AssertDeepEqual(a interface{}, b interface{}, m string)
 ```
-Check for simlarity (see: reflect.DeepEqual).
+AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	a1 := []string{"a"}
+	a2 := []string{"a"}
+	
+	Go(T).AssertDeepEqual(a1, a2, "should deep equal")
 
 
 #### AssertEqual
@@ -104,8 +134,18 @@ Check for simlarity (see: reflect.DeepEqual).
 ```go
 func (t *GoT) AssertEqual(a interface{}, b interface{}, m string)
 ```
-Check for equality.
+AssertEqual check for equality.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).AssertEqual(1, 1, "should equal")
 
 
 #### AssertLength
@@ -113,8 +153,19 @@ Check for equality.
 ```go
 func (t *GoT) AssertLength(a interface{}, n int, m string)
 ```
-Check length is n.
+AssertLength checks for length equal to `n int`. If the type passed cannot be
+checked for length and error is logged stating as such.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).AssertLength("a", 1, "should be length")
 
 
 #### AssertNil
@@ -122,8 +173,18 @@ Check length is n.
 ```go
 func (t *GoT) AssertNil(a interface{}, m string)
 ```
-Check for nil.
+AssertNil checks for nil.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).AssertNil(nil, "should be nil")
 
 
 #### Refute
@@ -131,8 +192,18 @@ Check for nil.
 ```go
 func (t *GoT) Refute(a bool, m string)
 ```
-Check for false.
+Refute checks for false.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).Refute(false, "should not be true")
 
 
 #### RefuteDeepEqual
@@ -140,8 +211,21 @@ Check for false.
 ```go
 func (t *GoT) RefuteDeepEqual(a interface{}, b interface{}, m string)
 ```
-Check for no simlarity (see: reflect.DeepEqual).
+RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	a1 := []string{"a"}
+	a2 := []string{"b"}
+	
+	Go(T).RefuteDeepEqual(a1, a2, "should not deep equal")
 
 
 #### RefuteEqual
@@ -149,8 +233,18 @@ Check for no simlarity (see: reflect.DeepEqual).
 ```go
 func (t *GoT) RefuteEqual(a interface{}, b interface{}, m string)
 ```
-Check for inequality.
+RefuteEqual checks for inequality.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).RefuteEqual(1, 2, "should not equal")
 
 
 #### RefuteLength
@@ -158,8 +252,20 @@ Check for inequality.
 ```go
 func (t *GoT) RefuteLength(a interface{}, n int, m string)
 ```
-Check length is not n.
+RefuteLength checks for length not equal to `n int`. If the type passed cannot
+be checked for length this assertion will pass. (I'm not sure this is the best
+way to handle this, feedback is welcome.)
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).RefuteLength("a", 0, "should not be length")
 
 
 #### RefuteNil
@@ -167,8 +273,18 @@ Check length is not n.
 ```go
 func (t *GoT) RefuteNil(a interface{}, m string)
 ```
-Check for not nil.
+RefuteNil checks for not nil.
 
+
+
+##### Example:
+	// For example only, T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	//
+	T := new(testing.T)
+	
+	Go(T).RefuteNil(1, "should not be nil")
 
 
 

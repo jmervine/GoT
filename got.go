@@ -1,6 +1,54 @@
-package got
+/*
 
-// Simple Assertion wrapper for Go's built in "testing" package.
+Simple Assertion wrapper for Go's built in "testing" package.
+
+GoT is designed to be as simple and unintrusive as possible while adding basic Assert and Refute methods to assist in writing clean and clean tests quickly.
+
+Setup Examples:
+
+    // ------------------------------------------------ //
+    // Simple:
+
+    import (
+        "github.com/jmervine/GoT"
+        "testing"
+    )
+
+    func TestFoo(T *testing.T) {
+       t := got.Go(T)
+       t.Assert(true, "should be true")
+    }
+
+    // ------------------------------------------------ //
+    // Global:
+    //
+
+    import (
+        "github.com/jmervine/GoT"
+        "testing"
+    )
+
+    var Go := got.Go
+    func TestFoo(T *testing.T) {
+       Go(T).Assert(true, "should be true")
+       Go(T).Refute(false, "should be false")
+    }
+
+    // ------------------------------------------------ //
+    // Authors Perfered:
+
+    import (
+        . "github.com/jmervine/GoT"
+        "testing"
+    )
+
+    func TestFoo(T *testing.T) {
+       Go(T).Assert(true, "should be true")
+       Go(T).Refute(false, "should be false")
+    }
+
+*/
+package got
 
 import (
     "fmt"
@@ -14,11 +62,12 @@ import (
  * Setup
  ***************************************************/
 
+// GoT is container for Go's build in testing package.
 type GoT struct {
     t *testing.T
 }
 
-// Core "testing" wrapper to apply assertions.
+// Go wraps "testing" to apply assertions.
 func Go(T *testing.T) *GoT {
     return &GoT{t: T}
 }
@@ -27,21 +76,21 @@ func Go(T *testing.T) *GoT {
  * Assertions
  ***************************************************/
 
-// Check for true.
+// Assert checks for true.
 func (t *GoT) Assert(a bool, m string) {
     if !a {
         t.error(m)
     }
 }
 
-// Check for false.
+// Refute checks for false.
 func (t *GoT) Refute(a bool, m string) {
     if a {
         t.error(m)
     }
 }
 
-// Check for equality.
+// AssertEqual check for equality.
 func (t *GoT) AssertEqual(a interface{}, b interface{}, m string) {
     if pass, err := equal(a, b); err != "" {
         t.error(err)
@@ -50,7 +99,7 @@ func (t *GoT) AssertEqual(a interface{}, b interface{}, m string) {
     }
 }
 
-// Check for inequality.
+// RefuteEqual checks for inequality.
 func (t *GoT) RefuteEqual(a interface{}, b interface{}, m string) {
     if pass, err := equal(a, b); err != "" {
         t.error(err)
@@ -59,35 +108,36 @@ func (t *GoT) RefuteEqual(a interface{}, b interface{}, m string) {
     }
 }
 
-// Check for simlarity (see: reflect.DeepEqual).
+// AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
 func (t *GoT) AssertDeepEqual(a interface{}, b interface{}, m string) {
     if !deepEqual(a, b) {
         t.error(m)
     }
 }
 
-// Check for no simlarity (see: reflect.DeepEqual).
+// RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
 func (t *GoT) RefuteDeepEqual(a interface{}, b interface{}, m string) {
     if deepEqual(a, b) {
         t.error(m)
     }
 }
 
-// Check for nil.
+// AssertNil checks for nil.
 func (t *GoT) AssertNil(a interface{}, m string) {
     if !isNil(a) {
         t.error(m)
     }
 }
 
-// Check for not nil.
+// RefuteNil checks for not nil.
 func (t *GoT) RefuteNil(a interface{}, m string) {
     if isNil(a) {
         t.error(m)
     }
 }
 
-// Check length is n.
+// AssertLength checks for length equal to `n int`. If the type passed
+// cannot be checked for length and error is logged stating as such.
 func (t *GoT) AssertLength(a interface{}, n int, m string) {
     if pass, err := checkLen(a, n); !pass && err != "" {
         t.error(err)
@@ -96,7 +146,9 @@ func (t *GoT) AssertLength(a interface{}, n int, m string) {
     }
 }
 
-// Check length is not n.
+// RefuteLength checks for length not equal to `n int`. If the type passed
+// cannot be checked for length this assertion will pass. (I'm not sure
+// this is the best way to handle this, feedback is welcome.)
 func (t *GoT) RefuteLength(a interface{}, n int, m string) {
     if pass, _ := checkLen(a, n); pass {
         t.error(m)
