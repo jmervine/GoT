@@ -71,6 +71,9 @@ func TestString(T *testing.T) {
     Go(T).RefuteLength(s1, 0, "string: assert length")
 
     Go(T).RefuteNil(s1, "string: refute nil")
+
+    Go(T).AssertContains(s1, "as", "string: assert contains")
+    Go(T).RefuteContains(s3, "as", "string: assert contains")
 }
 
 func TestArray(T *testing.T) {

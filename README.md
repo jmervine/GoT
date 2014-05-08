@@ -116,6 +116,20 @@ Expects:
 	Go(T).Assert(true, "should be true")
 
 
+#### AssertContains
+
+```go
+func (t *GoT) AssertContains(args ...string)
+```
+AssertContains checks for the existence of the second string inside the first
+string.
+
+Expects:
+
+    AssertContains(a string, b string, optional_message string)
+
+
+
 #### AssertDeepEqual
 
 ```go
@@ -238,6 +252,20 @@ Expects:
 	
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
+
+
+#### RefuteContains
+
+```go
+func (t *GoT) RefuteContains(args ...string)
+```
+RefuteContains checks for the non-existence of the second string inside the
+first string.
+
+Expects:
+
+    RefuteContains(a string, b string, optional_message string)
+
 
 
 #### RefuteDeepEqual

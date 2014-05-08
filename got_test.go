@@ -1,6 +1,7 @@
 package GoT
 
 import (
+    "strings"
     "testing"
 )
 
@@ -86,6 +87,14 @@ func TestRefuteLength(T *testing.T) {
     Go(T).RefuteLength(map[string]string{}, 1, "should refute length on array")
 }
 
+func TestAssertContains(T *testing.T) {
+    Go(T).AssertContains("asdf", "a")
+}
+
+func TestRefuteContains(T *testing.T) {
+    Go(T).RefuteContains("asdf", "q")
+}
+
 func TestAllFailureConditions(T *testing.T) {
     // Uncomment when testing changes to failure messaging.
     //
@@ -120,6 +129,138 @@ func TestAllFailureConditions(T *testing.T) {
     //Go(T).RefuteLength("", 0)
     //Go(T).RefuteLength("", 0, "RefuteLength: should fail here.")
 }
+
+func Test_equal(T *testing.T) {
+    t := Go(T)
+
+    pass, msg := equal("a", "a")
+
+    // While using GoT to test this, I'm not using the assetion
+    // that contins the helper being tested.
+    t.Assert(pass, "equal should return true")
+    t.Assert(msg == "", "message should be empty")
+
+    pass, msg = equal("a", "b")
+    t.Refute(pass, "equal should return false")
+    t.Assert(msg == "", "message should be empty")
+
+    pass, msg = equal([]string{"a"}, []string{"a"})
+    t.Refute(pass, "equal should return false")
+    t.Assert(strings.Contains(msg, "runtime error: comparing uncomparable type"), "should contain runtime error")
+}
+
+func Test_deepEqual(T *testing.T) {
+    t := Go(T)
+
+    // While using GoT to test this, I'm not using the assetion
+    // that contins the helper being tested.
+    a1 := []string{"a"}
+    a2 := []string{"a"}
+    a3 := []int{1}
+    a4 := []int{1}
+
+    m1 := map[string]string{"a": "b"}
+    m2 := map[string]string{"a": "b"}
+    m3 := map[string]int{"a": 1}
+    m4 := map[string]int{"a": 1}
+
+    t.Assert(deepEqual(a1, a2), "deep equal should return true")
+    t.Assert(deepEqual(a3, a4), "deep equal should return true")
+    t.Assert(deepEqual(m1, m2), "deep equal should return true")
+    t.Assert(deepEqual(m3, m4), "deep equal should return true")
+
+    a2 = []string{"b"}
+    a4 = []int{2}
+    m2 = map[string]string{"a": "c"}
+    m4 = map[string]int{"a": 2}
+
+    t.Refute(deepEqual(a1, a2), "deep equal should return false")
+    t.Refute(deepEqual(a3, a4), "deep equal should return false")
+    t.Refute(deepEqual(m1, m2), "deep equal should return false")
+    t.Refute(deepEqual(m3, m4), "deep equal should return false")
+
+    t.Refute(deepEqual(a1, a3), "deep equal should return false")
+    t.Refute(deepEqual(a1, m1), "deep equal should return false")
+}
+
+func Test_isNil(T *testing.T) {
+    t := Go(T)
+
+    // While using GoT to test this, I'm not using the assetion
+    // that contins the helper being tested.
+    var (
+        i   interface{}
+        a   []string
+        m   map[string]string
+        s   string
+        n   int
+        f   float32
+        b   bool
+    )
+
+    t.Assert(isNil(i))
+    t.Assert(isNil(a))
+    t.Assert(isNil(m))
+    t.Assert(isNil(m))
+
+    t.Refute(isNil(s))
+    t.Refute(isNil(n))
+    t.Refute(isNil(f))
+    t.Refute(isNil(b))
+
+    // structs
+    type Type struct{}
+    var tp *Type
+
+    tt := new(Type)
+
+    t.Refute(isNil(tt))
+    t.Assert(isNil(tp))
+}
+
+func Test_checkLen(T *testing.T) {
+    t := Go(T)
+
+    // While using GoT to test this, I'm not using the assetion
+    // that contins the helper being tested.
+    a1 := []string{"a"}
+    a2 := []int{1}
+
+    m1 := map[string]string{"a": "b"}
+    m2 := map[string]int{"a": 1}
+
+    s := "a"
+
+    t.Assert(checkLen(a1, 1))
+    t.Assert(checkLen(a2, 1))
+    t.Assert(checkLen(m1, 1))
+    t.Assert(checkLen(m2, 1))
+    t.Assert(checkLen(s, 1))
+
+    t.Refute(checkLen(a1, 0))
+    t.Refute(checkLen(a2, 0))
+    t.Refute(checkLen(m1, 0))
+    t.Refute(checkLen(m2, 0))
+    t.Refute(checkLen(s, 0))
+}
+
+func Test_contains(T *testing.T) {
+    t := Go(T)
+
+    // While using GoT to test this, I'm not using the assetion
+    // that contins the helper being tested.
+    s1 := "asdf"
+    s2 := "a"
+    s3 := "q"
+
+    t.Assert(contains(s1, s1))
+    t.Assert(contains(s1, s2))
+
+    t.Refute(contains(s1, s3))
+    t.Refute(contains(s2, s1))
+}
+
+// Examples
 
 func ExampleGoT_Assert() {
     // For example only, T comes from:

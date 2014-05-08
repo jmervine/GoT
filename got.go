@@ -60,6 +60,7 @@ import (
     "path"
     "reflect"
     "runtime"
+    "strings"
     "testing"
 )
 
@@ -282,10 +283,53 @@ func (t *GoT) RefuteLength(args ...interface{}) {
     }
 }
 
+// AssertContains checks for the existence of the second string inside
+// the first string.
+//
+// Expects:
+//
+//   AssertContains(a string, b string, optional_message string)
+//
+func (t *GoT) AssertContains(args ...string) {
+    var msg string
+    if len(args) == 3 && args[2] != "" {
+        msg = args[2]
+    } else {
+        msg = fmt.Sprintf("AssertContains expected %q to contain %q", args[0], args[1])
+    }
+
+    if pass := contains(args[0], args[1]); !pass {
+        t.error(msg)
+    }
+}
+
+// RefuteContains checks for the non-existence of the second string
+// inside the first string.
+//
+// Expects:
+//
+//   RefuteContains(a string, b string, optional_message string)
+//
+func (t *GoT) RefuteContains(args ...string) {
+    var msg string
+    if len(args) == 3 && args[2] != "" {
+        msg = args[2]
+    } else {
+        msg = fmt.Sprintf("RefuteContains expected %q to not contain %q", args[0], args[1])
+    }
+
+    if pass := contains(args[0], args[1]); pass {
+        t.error(msg)
+    }
+}
+
 /**
  * Helpers
  ***************************************************/
 
+// error is a helper wrapping the "testing" packages internal
+// error logger to include the actual file name and line number
+// where the assetion failed
 func (t *GoT) error(m string) {
     var err string
     if _, file, line, ok := runtime.Caller(2); ok {
@@ -296,21 +340,27 @@ func (t *GoT) error(m string) {
     t.t.Error(err)
 }
 
-func equal(a interface{}, b interface{}) (r bool, e string) {
+// equal is a helper method for checking equality.
+func equal(a interface{}, b interface{}) (check bool, err string) {
     defer func() {
         if catch := recover(); catch != nil {
-            r = false
-            e = fmt.Sprint(catch)
+            check = false
+            err = fmt.Sprint(catch)
         }
     }()
 
-    return a == b, ""
+    check = a == b
+    err = ""
+
+    return check, err
 }
 
+// deepEqual is a helper method for checking deep equality.
 func deepEqual(a interface{}, b interface{}) bool {
     return reflect.DeepEqual(a, b)
 }
 
+// isNil is a helper method for checking for nil.
 func isNil(a interface{}) bool {
     if a == nil {
         return true
@@ -322,6 +372,7 @@ func isNil(a interface{}) bool {
     return false
 }
 
+// checkLen is a helper method for checking length.
 func checkLen(a interface{}, n int) (pass bool, err string) {
     value := reflect.ValueOf(a)
     switch value.Kind() {
@@ -330,4 +381,12 @@ func checkLen(a interface{}, n int) (pass bool, err string) {
     default:
         return false, "obtained value type has no length"
     }
+}
+
+// contains is a helper to check to see if a string contains
+// another string.
+//
+// TODO: update this to work with arrays, maps and structs as well
+func contains(a string, b string) bool {
+    return strings.Contains(a, b)
 }
