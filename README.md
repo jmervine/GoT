@@ -17,9 +17,8 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 import "github.com/jmervine/GoT"
 ```
 
-Simple Assertion wrapper for Go's built in "testing" package.
-
-GoT is designed to be as simple and unintrusive as possible while adding basic
+Package GoT is a simple assertion wrapper for Go's built in "testing" package,
+which is designed to be as simple and unintrusive as possible while adding basic
 Assert and Refute methods to assist in writing clean and clean tests quickly.
 
 Setup Examples:
@@ -48,7 +47,6 @@ Setup Examples:
     }
     // ------------------------------------------------ //
     // Authors Perfered:
-    //
     import (
         . "github.com/jmervine/GoT"
         "testing"
