@@ -151,7 +151,6 @@ func (t *GoT) RefuteEqual(args ...interface{}) {
 //   AssertDeepEqual(a interface{}, b interface{}, optional_message string)
 //
 func (t *GoT) AssertDeepEqual(args ...interface{}) {
-    //msg := message(3, "AssertDeepEqual expected deep equal check to succeed", false, -1, args...)
     msg := message(3, "AssertDeepEqual expected deep equal check to succeed", args...)
 
     if !deepEqual(args[0], args[1]) {
@@ -168,7 +167,6 @@ func (t *GoT) AssertDeepEqual(args ...interface{}) {
 //   RefuteDeepEqual(a interface{}, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteDeepEqual(args ...interface{}) {
-    //msg := message(3, "RefuteDeepEqual expected deep equal check to fail", false, -1, args...)
     msg := message(3, "RefuteDeepEqual expected deep equal check to fail", args...)
 
     if deepEqual(args[0], args[1]) {
@@ -183,7 +181,6 @@ func (t *GoT) RefuteDeepEqual(args ...interface{}) {
 //   AssertNil(a interface{}, optional_message string)
 //
 func (t *GoT) AssertNil(args ...interface{}) {
-    //msg := message(2, "AssertNil expected %v to be nil", false, 0, args...)
     msg := message(2, fmt.Sprintf("AssertNil expected %v to be nil", args[0]), args...)
 
     if !isNil(args[0]) {
@@ -198,7 +195,6 @@ func (t *GoT) AssertNil(args ...interface{}) {
 //   RefuteNil(a interface{}, optional_message string)
 //
 func (t *GoT) RefuteNil(args ...interface{}) {
-    //msg := message(2, "RefuteNil expected %v not to be nil", false, 0, args...)
     msg := message(2, fmt.Sprintf("RefuteNil expected %v not to be nil", args[0]), args...)
 
     if isNil(args[0]) {
@@ -240,7 +236,6 @@ func (t *GoT) AssertLength(args ...interface{}) {
 //   RefuteLength(a interface{}, n int, optional_message string)
 //
 func (t *GoT) RefuteLength(args ...interface{}) {
-    //msg := message(3, "RefuteLength expected length to not be %d", false, 1, args...)
     msg := message(3, fmt.Sprintf("RefuteLength expected length to not be %d", args[1]), args...)
 
     if pass, _ := checkLen(args[0], args[1].(int)); pass {
@@ -256,12 +251,21 @@ func (t *GoT) RefuteLength(args ...interface{}) {
 //   AssertContains(a interface{}, b interface{}, optional_message string)
 //
 func (t *GoT) AssertContains(args ...interface{}) {
-    //msg := message(3, "AssertContains expected \"%v\" to contain \"%v\"", true, -1, args...)
-    msg := message(3, fmt.Sprintf("AssertContains expected \"%v\" to contain \"%v\"", args...), args...)
+    t.assertContains("AssertContains", args...)
+}
+
+// AssertHas is an alias for AssertContains
+func (t *GoT) AssertHas(args ...interface{}) {
+    t.assertContains("AssertHas", args...)
+}
+
+// assertContains is the real assertion, allowing for aliasing.
+func (t *GoT) assertContains(name string, args ...interface{}) {
+    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to contain \"%v\"", args...), args...)
     if pass, err := contains(args[0], args[1]); !pass && err != "" {
-        t.error(err)
+        t.error(err, 3)
     } else if !pass {
-        t.error(msg)
+        t.error(msg, 3)
     }
 }
 
@@ -273,10 +277,19 @@ func (t *GoT) AssertContains(args ...interface{}) {
 //   RefuteContains(a interface{}, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteContains(args ...interface{}) {
-    //msg := message(3, "RefuteContains expected \"%v\" to not contain \"%v\"", true, -1, args...)
-    msg := message(3, fmt.Sprintf("RefuteContains expected \"%v\" to not contain \"%v\"", args...), args...)
+    t.refuteContains("RefuteContains", args...)
+}
+
+// RefuteHas is an alias for RefuteContains
+func (t *GoT) RefuteHas(args ...interface{}) {
+    t.refuteContains("RefuteHas", args...)
+}
+
+// refuteContains is the real assertion, allowing for aliasing.
+func (t *GoT) refuteContains(name string, args ...interface{}) {
+    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to not contain \"%v\"", args...), args...)
     if pass, _ := contains(args[0], args[1]); pass {
-        t.error(msg)
+        t.error(msg, 3)
     }
 }
 
@@ -307,9 +320,21 @@ func message(n int, m string, args ...interface{}) string {
 // error is a helper wrapping the "testing" packages internal
 // error logger to include the actual file name and line number
 // where the assetion failed
-func (t *GoT) error(m string) {
+//
+// Expects:
+//
+//   t.error(message string, optional_call_depth int)
+//
+func (t *GoT) error(args ...interface{}) {
+    m := args[0].(string)
+
+    depth := 2
+    if len(args) == 2 {
+        depth = args[1].(int)
+    }
+
     var err string
-    if _, file, line, ok := runtime.Caller(2); ok {
+    if _, file, line, ok := runtime.Caller(depth); ok {
         err = fmt.Sprintf("> %s:%d: %s", path.Base(file), line, m)
     } else {
         err = fmt.Sprintf("> ???:-1: %s", m)

@@ -74,6 +74,10 @@ func TestString(T *testing.T) {
 
     Go(T).AssertContains(s1, "as", "string: assert contains")
     Go(T).RefuteContains(s3, "as", "string: assert contains")
+
+    // Alias for Contains
+    Go(T).AssertHas(s1, "as", "string: assert contains")
+    Go(T).RefuteHas(s3, "as", "string: assert contains")
 }
 
 func TestArray(T *testing.T) {

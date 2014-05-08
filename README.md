@@ -134,6 +134,9 @@ Expects:
 	Go(T).AssertContains("asdf", "a")
 	Go(T).AssertContains([1]int{1}, 1)
 	Go(T).AssertContains([]int{1}, 1)
+	
+	// Alias:
+	Go(T).AssertHas("asdf", "a")
 
 
 #### AssertDeepEqual
@@ -182,6 +185,15 @@ Expects:
 	
 	Go(T).AssertEqual(1, 1)
 	Go(T).AssertEqual(1, 1, "should equal")
+
+
+#### AssertHas
+
+```go
+func (t *GoT) AssertHas(args ...interface{})
+```
+AssertHas is an alias for AssertContains
+
 
 
 #### AssertLength
@@ -273,6 +285,9 @@ Expects:
 	Go(T).RefuteContains("asdf", "q")
 	Go(T).RefuteContains([1]int{1}, 2)
 	Go(T).RefuteContains([]int{1}, 2)
+	
+	// Alias:
+	Go(T).RefuteHas("asdf", "q")
 
 
 #### RefuteDeepEqual
@@ -322,6 +337,15 @@ Expects:
 	
 	Go(T).RefuteEqual(1, 2)
 	Go(T).RefuteEqual(1, 2, "should not equal")
+
+
+#### RefuteHas
+
+```go
+func (t *GoT) RefuteHas(args ...interface{})
+```
+RefuteHas is an alias for RefuteContains
+
 
 
 #### RefuteLength

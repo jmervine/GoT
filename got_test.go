@@ -134,6 +134,7 @@ func TestAllFailureConditions(T *testing.T) {
     //Go(T).RefuteLength("", 0, "RefuteLength: should fail here.")
 
     //Go(T).AssertContains("asdf", "q", "AssertContains: custom message")
+    //Go(T).AssertHas("asdf", "q", "AssertHas: custom message")
 
     //Go(T).AssertContains("asdf", "q")
     //Go(T).AssertContains([1]int{1}, 2)
@@ -141,6 +142,7 @@ func TestAllFailureConditions(T *testing.T) {
     //Go(T).RefuteContains("asdf", "a", "AssertContains: custom message")
 
     //Go(T).RefuteContains("asdf", "a")
+    //Go(T).RefuteHas("asdf", "a")
     //Go(T).RefuteContains([1]int{1}, 1)
 }
 
@@ -412,6 +414,9 @@ func ExampleGoT_AssertContains() {
     Go(T).AssertContains("asdf", "a")
     Go(T).AssertContains([1]int{1}, 1)
     Go(T).AssertContains([]int{1}, 1)
+
+    // Alias:
+    Go(T).AssertHas("asdf", "a")
 }
 
 func ExampleGoT_RefuteContains() {
@@ -422,6 +427,9 @@ func ExampleGoT_RefuteContains() {
     Go(T).RefuteContains("asdf", "q")
     Go(T).RefuteContains([1]int{1}, 2)
     Go(T).RefuteContains([]int{1}, 2)
+
+    // Alias:
+    Go(T).RefuteHas("asdf", "q")
 }
 
 func ExampleGo() {
