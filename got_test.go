@@ -283,7 +283,7 @@ func Test_contains(T *testing.T) {
 }
 
 // Examples
-var T (*testing.T) = new(testing.T)
+var T = new(testing.T)
 
 func ExampleGoT_Assert() {
     // T comes from:
