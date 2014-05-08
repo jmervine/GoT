@@ -5,15 +5,21 @@ travis: get .PHONY
 
 test: format .PHONY
 	# Run Test Suite
-	-go test -test.v=true
+	go test -test.v=true
+
+quiet/test: .PHONY
+	go test
 
 functional: .PHONY
 	cd _example; go test -test.v
 
-build: test .PHONY
+quiet/functional: .PHONY
+	cd _example; go test
+
+build: format quiet/test quiet/functional .PHONY
 	go build -o 'pkg/got' -v -a -race
 
-readme: test
+readme: format quiet/test quiet/functional .PHONY
 	# generating readme
 	godoc -ex -v -templates "$(PWD)/_support" . > README.md
 

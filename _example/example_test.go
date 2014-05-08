@@ -84,6 +84,22 @@ func TestArray(T *testing.T) {
     Go(T).RefuteLength(a1, 0, "array: refute length")
 
     Go(T).RefuteNil(a1, "array: refute nil")
+
+    Go(T).AssertContains(a1, "a", "array: assert contains")
+    Go(T).RefuteContains(a3, "a", "array: assert contains")
+}
+
+func TestSlice(T *testing.T) {
+    Go(T).AssertDeepEqual(a4, a5, "slice: assert deep equal")
+    Go(T).RefuteDeepEqual(a4, a6, "slice: refute deep equal")
+
+    Go(T).AssertLength(a4, 4, "slice: assert length")
+    Go(T).RefuteLength(a4, 0, "slice: refute length")
+
+    Go(T).RefuteNil(a4, "slice: refute nil")
+
+    Go(T).AssertContains(a4, "a", "slice: assert contains")
+    Go(T).RefuteContains(a6, "a", "slice: assert contains")
 }
 
 func TestMap(T *testing.T) {

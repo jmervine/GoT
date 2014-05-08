@@ -5,13 +5,18 @@ var (
     n1 , n2 , n3      int
     f1 , f2 , f3      float64
     s1 , s2 , s3      string
-    a1 , a2 , a3      []string
     m1 , m2 , m3      map[string]string
 
     i1 , i2 , i3 , i4 interface{}
     t1 , t2 , t3 , t4 Type
     p1 , p2 , p3 , p4 *Type
     p5 , p6 , p7 , p8 *[]int
+
+    // array
+    a1 , a2 , a3      [4]string
+
+    // slice
+    a4 , a5 , a6      []string
 )
 
 type Type struct {
@@ -35,9 +40,13 @@ func init() {
     s2 = "asdf"
     s3 = "qwer"
 
-    a1 = []string{ "a", "s", "d", "f" }
-    a2 = []string{ "a", "s", "d", "f" }
-    a3 = []string{ "q", "w", "e", "f" }
+    a1 = [4]string{ "a", "s", "d", "f" }
+    a2 = [4]string{ "a", "s", "d", "f" }
+    a3 = [4]string{ "q", "w", "e", "f" }
+
+    a4 = []string{ "a", "s", "d", "f" }
+    a5 = []string{ "a", "s", "d", "f" }
+    a6 = []string{ "q", "w", "e", "f" }
 
     m1 = map[string]string{ "a": "s", "d": "f" }
     m2 = map[string]string{ "a": "s", "d": "f" }

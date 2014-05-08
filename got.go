@@ -283,45 +283,57 @@ func (t *GoT) RefuteLength(args ...interface{}) {
     }
 }
 
-// AssertContains checks for the existence of the second string inside
-// the first string.
+// AssertContains checks for the existence of the second element inside
+// the first string, array or slice.
 //
 // Expects:
 //
-//   AssertContains(a string, b string, optional_message string)
+//   AssertContains(a interface{}, b interface{}, optional_message string)
 //
-func (t *GoT) AssertContains(args ...string) {
+func (t *GoT) AssertContains(args ...interface{}) {
     var msg string
-    if len(args) == 3 && args[2] != "" {
-        msg = args[2]
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
     } else {
-        msg = fmt.Sprintf("AssertContains expected %q to contain %q", args[0], args[1])
+        msg = fmt.Sprintf("AssertContains expected \"%v\" to contain \"%v\"", args[0], args[1])
     }
 
-    if pass := contains(args[0], args[1]); !pass {
+    if pass, err := contains(args[0], args[1]); !pass && err != "" {
+        t.error(err)
+    } else if !pass {
         t.error(msg)
     }
 }
 
-// RefuteContains checks for the non-existence of the second string
-// inside the first string.
+// RefuteContains checks for the non-existence of the second element
+// inside the first string, array or slice.
 //
 // Expects:
 //
-//   RefuteContains(a string, b string, optional_message string)
+//   RefuteContains(a interface{}, b interface{}, optional_message string)
 //
-func (t *GoT) RefuteContains(args ...string) {
+func (t *GoT) RefuteContains(args ...interface{}) {
     var msg string
-    if len(args) == 3 && args[2] != "" {
-        msg = args[2]
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
     } else {
         msg = fmt.Sprintf("RefuteContains expected %q to not contain %q", args[0], args[1])
     }
 
-    if pass := contains(args[0], args[1]); pass {
+    if pass, _ := contains(args[0], args[1]); pass {
         t.error(msg)
     }
 }
+
+// TODO:
+//
+// For map's only:
+// - AssertHasKey
+// - RefuteHeyKey
+//
+// For map's, array's, strings and maybe structs.
+// - AssertHasVal
+// - RefuteHasVal
 
 /**
  * Helpers
@@ -383,10 +395,32 @@ func checkLen(a interface{}, n int) (pass bool, err string) {
     }
 }
 
-// contains is a helper to check to see if a string contains
-// another string.
-//
-// TODO: update this to work with arrays, maps and structs as well
-func contains(a string, b string) bool {
-    return strings.Contains(a, b)
+// contains is a helper to check to see if a string, array or slice
+// contains the correctly typed element.
+func contains(a interface{}, b interface{}) (check bool, err string) {
+    defer func() {
+        if catch := recover(); catch != nil {
+            check = false
+            err = fmt.Sprint(catch)
+        }
+    }()
+
+    haystack := reflect.ValueOf(a)
+    needle := reflect.ValueOf(b)
+
+    switch haystack.Kind() {
+    case reflect.String:
+        return strings.Contains(a.(string), b.(string)), ""
+    case reflect.Array, reflect.Slice:
+        for i := 0; i < haystack.Len(); i++ {
+            // convert to two comparable types
+            if haystack.Index(i).Interface() == needle.Interface() {
+                return true, ""
+            }
+        }
+    default:
+        return false, fmt.Sprintf("assertion error: contains doesn't support %v", haystack.Kind())
+    }
+
+    return false, ""
 }

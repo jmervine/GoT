@@ -80,11 +80,9 @@ func Go(T *testing.T) *GoT
 Go wraps "testing" to apply assertions.
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
@@ -106,11 +104,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
@@ -119,15 +115,25 @@ Expects:
 #### AssertContains
 
 ```go
-func (t *GoT) AssertContains(args ...string)
+func (t *GoT) AssertContains(args ...interface{})
 ```
-AssertContains checks for the existence of the second string inside the first
-string.
+AssertContains checks for the existence of the second element inside the first
+string, array or slice.
 
 Expects:
 
-    AssertContains(a string, b string, optional_message string)
+    AssertContains(a interface{}, b interface{}, optional_message string)
 
+
+
+##### Example:
+	// T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	
+	Go(T).AssertContains("asdf", "a")
+	Go(T).AssertContains([1]int{1}, 1)
+	Go(T).AssertContains([]int{1}, 1)
 
 
 #### AssertDeepEqual
@@ -144,11 +150,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	a1 := []string{"a"}
 	a2 := []string{"a"}
@@ -171,11 +175,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).AssertEqual(1, 1)
 	Go(T).AssertEqual(1, 1, "should equal")
@@ -196,11 +198,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).AssertLength("a", 1)
 	Go(T).AssertLength("a", 1, "should be length")
@@ -220,11 +220,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).AssertNil(nil)
 	Go(T).AssertNil(nil, "should be nil")
@@ -244,11 +242,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
@@ -257,15 +253,25 @@ Expects:
 #### RefuteContains
 
 ```go
-func (t *GoT) RefuteContains(args ...string)
+func (t *GoT) RefuteContains(args ...interface{})
 ```
-RefuteContains checks for the non-existence of the second string inside the
-first string.
+RefuteContains checks for the non-existence of the second element inside the
+first string, array or slice.
 
 Expects:
 
-    RefuteContains(a string, b string, optional_message string)
+    RefuteContains(a interface{}, b interface{}, optional_message string)
 
+
+
+##### Example:
+	// T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	
+	Go(T).RefuteContains("asdf", "q")
+	Go(T).RefuteContains([1]int{1}, 2)
+	Go(T).RefuteContains([]int{1}, 2)
 
 
 #### RefuteDeepEqual
@@ -282,11 +288,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	a1 := []string{"a"}
 	a2 := []string{"b"}
@@ -309,11 +313,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).RefuteEqual(1, 2)
 	Go(T).RefuteEqual(1, 2, "should not equal")
@@ -335,11 +337,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).RefuteLength("a", 0)
 	Go(T).RefuteLength("a", 0, "should not be length")
@@ -359,11 +359,9 @@ Expects:
 
 
 ##### Example:
-	// For example only, T comes from:
+	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	//
-	T := new(testing.T)
 	
 	Go(T).RefuteNil(1)
 	Go(T).RefuteNil(1, "should not be nil")

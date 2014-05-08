@@ -89,10 +89,14 @@ func TestRefuteLength(T *testing.T) {
 
 func TestAssertContains(T *testing.T) {
     Go(T).AssertContains("asdf", "a")
+    Go(T).AssertContains([1]int{1}, 1)
+    Go(T).AssertContains([]int{1}, 1)
 }
 
 func TestRefuteContains(T *testing.T) {
     Go(T).RefuteContains("asdf", "q")
+    Go(T).RefuteContains([1]int{1}, 2)
+    Go(T).RefuteContains([]int{1}, 2)
 }
 
 func TestAllFailureConditions(T *testing.T) {
@@ -258,60 +262,69 @@ func Test_contains(T *testing.T) {
 
     t.Refute(contains(s1, s3))
     t.Refute(contains(s2, s1))
+
+    a1 := [1]string{"a"}
+    a2 := [1]int{1}
+    a3 := []string{"a"}
+    a4 := []int{1}
+
+    //m1 := map[string]string{"a": "b"}
+    //m2 := map[string]int{"a": 1}
+
+    t.Assert(contains(a1, "a"))
+    t.Assert(contains(a2, 1))
+    t.Assert(contains(a3, "a"))
+    t.Assert(contains(a4, 1))
+
+    t.Refute(contains(a1, "q"))
+    t.Refute(contains(a2, 2))
+    t.Refute(contains(a3, "q"))
+    t.Refute(contains(a4, 2))
 }
 
 // Examples
+var T (*testing.T) = new(testing.T)
 
 func ExampleGoT_Assert() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).Assert(true)
     Go(T).Assert(true, "should be true")
 }
 
 func ExampleGoT_Refute() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).Refute(false)
     Go(T).Refute(false, "should not be true")
 }
 
 func ExampleGoT_AssertEqual() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).AssertEqual(1, 1)
     Go(T).AssertEqual(1, 1, "should equal")
 }
 
 func ExampleGoT_RefuteEqual() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).RefuteEqual(1, 2)
     Go(T).RefuteEqual(1, 2, "should not equal")
 }
 
 func ExampleGoT_AssertDeepEqual() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     a1 := []string{"a"}
     a2 := []string{"a"}
@@ -321,11 +334,9 @@ func ExampleGoT_AssertDeepEqual() {
 }
 
 func ExampleGoT_RefuteDeepEqual() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     a1 := []string{"a"}
     a2 := []string{"b"}
@@ -335,55 +346,65 @@ func ExampleGoT_RefuteDeepEqual() {
 }
 
 func ExampleGoT_AssertNil() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).AssertNil(nil)
     Go(T).AssertNil(nil, "should be nil")
 }
 
 func ExampleGoT_RefuteNil() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).RefuteNil(1)
     Go(T).RefuteNil(1, "should not be nil")
 }
 
 func ExampleGoT_AssertLength() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).AssertLength("a", 1)
     Go(T).AssertLength("a", 1, "should be length")
 }
 
 func ExampleGoT_RefuteLength() {
-    // For example only, T comes from:
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
-    //
-    T := new(testing.T)
 
     Go(T).RefuteLength("a", 0)
     Go(T).RefuteLength("a", 0, "should not be length")
 }
 
-func ExampleGo() {
-    // For example only, T comes from:
+func ExampleGoT_AssertContains() {
+    // T comes from:
     //
     //     func TestFoo(T *testing.T)
+
+    Go(T).AssertContains("asdf", "a")
+    Go(T).AssertContains([1]int{1}, 1)
+    Go(T).AssertContains([]int{1}, 1)
+}
+
+func ExampleGoT_RefuteContains() {
+    // T comes from:
     //
-    T := new(testing.T)
+    //     func TestFoo(T *testing.T)
+
+    Go(T).RefuteContains("asdf", "q")
+    Go(T).RefuteContains([1]int{1}, 2)
+    Go(T).RefuteContains([]int{1}, 2)
+}
+
+func ExampleGo() {
+    // T comes from:
+    //
+    //     func TestFoo(T *testing.T)
 
     Go(T).Assert(true)
     Go(T).Assert(true, "should be true")
