@@ -141,7 +141,8 @@ Expects:
 ```go
 func (t *GoT) AssertDeepEqual(args ...interface{})
 ```
-AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
+AssertDeepEqual checks for simlarity (see: reflect.DeepEqual). Note: I recommend
+custom messaging on this one, otherwise failure output will be ambigous.
 
 Expects:
 
@@ -279,7 +280,9 @@ Expects:
 ```go
 func (t *GoT) RefuteDeepEqual(args ...interface{})
 ```
-RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
+RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual). Note: I
+recommend custom messaging on this one, otherwise failure output will be
+ambigous.
 
 Expects:
 

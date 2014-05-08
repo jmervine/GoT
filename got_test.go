@@ -132,6 +132,29 @@ func TestAllFailureConditions(T *testing.T) {
 
     //Go(T).RefuteLength("", 0)
     //Go(T).RefuteLength("", 0, "RefuteLength: should fail here.")
+
+    //Go(T).AssertContains("asdf", "q", "AssertContains: custom message")
+
+    //Go(T).AssertContains("asdf", "q")
+    //Go(T).AssertContains([1]int{1}, 2)
+
+    //Go(T).RefuteContains("asdf", "a", "AssertContains: custom message")
+
+    //Go(T).RefuteContains("asdf", "a")
+    //Go(T).RefuteContains([1]int{1}, 1)
+}
+
+func Test_message(T *testing.T) {
+    t := Go(T)
+
+    args := []interface{}{"a", "a"}
+    msg := message(3, "default message", args...)
+
+    t.AssertEqual(msg, "default message")
+
+    args = append(args, "custom message")
+    msg = message(3, "default message", args...)
+    t.AssertEqual(msg, "custom message")
 }
 
 func Test_equal(T *testing.T) {
