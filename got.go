@@ -4,6 +4,8 @@ Package GoT is a simple assertion wrapper for Go's built in "testing" package,
 which is designed to be as simple and unintrusive as possible while adding basic
 Assert and Refute methods to assist in writing clean and clean tests quickly.
 
+<img src="http://cdn.mervine.net/GoT.jpg" />
+
 Setup Examples:
 
     // ------------------------------------------------ //

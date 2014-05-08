@@ -83,10 +83,10 @@ Go wraps "testing" to apply assertions.
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
-	
+
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
@@ -107,7 +107,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
 
@@ -130,7 +130,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertContains("asdf", "a")
 	Go(T).AssertContains([1]int{1}, 1)
 	Go(T).AssertContains([]int{1}, 1)
@@ -153,10 +153,10 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	a1 := []string{"a"}
 	a2 := []string{"a"}
-	
+
 	Go(T).AssertDeepEqual(a1, a2)
 	Go(T).AssertDeepEqual(a1, a2, "should deep equal")
 
@@ -178,7 +178,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertEqual(1, 1)
 	Go(T).AssertEqual(1, 1, "should equal")
 
@@ -201,7 +201,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertLength("a", 1)
 	Go(T).AssertLength("a", 1, "should be length")
 
@@ -223,7 +223,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertNil(nil)
 	Go(T).AssertNil(nil, "should be nil")
 
@@ -245,7 +245,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
@@ -268,7 +268,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteContains("asdf", "q")
 	Go(T).RefuteContains([1]int{1}, 2)
 	Go(T).RefuteContains([]int{1}, 2)
@@ -291,10 +291,10 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	a1 := []string{"a"}
 	a2 := []string{"b"}
-	
+
 	Go(T).RefuteDeepEqual(a1, a2)
 	Go(T).RefuteDeepEqual(a1, a2, "should not deep equal")
 
@@ -316,7 +316,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteEqual(1, 2)
 	Go(T).RefuteEqual(1, 2, "should not equal")
 
@@ -340,7 +340,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteLength("a", 0)
 	Go(T).RefuteLength("a", 0, "should not be length")
 
@@ -362,7 +362,7 @@ Expects:
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteNil(1)
 	Go(T).RefuteNil(1, "should not be nil")
 
