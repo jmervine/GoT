@@ -113,7 +113,7 @@ func ExampleGo() {
     // Simple:
     //
     // import (
-    //     "github.com/jmervine/got"
+    //     "github.com/jmervine/GoT"
     //     "testing"
     // )
     //
@@ -127,7 +127,7 @@ func ExampleGo() {
     // Global:
     //
     // import (
-    //     "github.com/jmervine/got"
+    //     "github.com/jmervine/GoT"
     //     "testing"
     // )
     //
@@ -142,7 +142,7 @@ func ExampleGo() {
     // Or:
     //
     // import (
-    //     . "github.com/jmervine/got"
+    //     . "github.com/jmervine/GoT"
     //     "testing"
     // )
     //

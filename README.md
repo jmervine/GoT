@@ -12,7 +12,7 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 ## Documentation
 
 ```go
-import "github.com/jmervine/goperf"
+import "github.com/jmervine/GoT"
 ```
 
 ### Types
@@ -41,7 +41,7 @@ Core "testing" wrapper to apply assertions.
 	// Simple:
 	//
 	// import (
-	//     "github.com/jmervine/got"
+	//     "github.com/jmervine/GoT"
 	//     "testing"
 	// )
 	//
@@ -55,7 +55,7 @@ Core "testing" wrapper to apply assertions.
 	// Global:
 	//
 	// import (
-	//     "github.com/jmervine/got"
+	//     "github.com/jmervine/GoT"
 	//     "testing"
 	// )
 	//
@@ -70,7 +70,7 @@ Core "testing" wrapper to apply assertions.
 	// Or:
 	//
 	// import (
-	//     . "github.com/jmervine/got"
+	//     . "github.com/jmervine/GoT"
 	//     "testing"
 	// )
 	//

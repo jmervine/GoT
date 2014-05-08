@@ -16,7 +16,7 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 ## Documentation
 
 ```go
-import "github.com/jmervine/goperf"
+import "github.com/jmervine/GoT"
 ```{{else}}
 {{end}}{{comment_text .Doc "" ""}}
 {{example_text $ "" "##### "}}{{/*
