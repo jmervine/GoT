@@ -9,7 +9,7 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 
 ##### See [examples](_example) for detailed assertion usage.
 
-## Documentation
+## [Documentation](https://godoc.org/github.com/jmervine/GoT)
 
 ```go
 import "github.com/jmervine/GoT"
