@@ -3,7 +3,7 @@
 ---------------------------------------
 
 */}}{{with .PDoc}}{{if not $.IsMain}}
-# Go Test
+# GoTest
 
 [![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
 
@@ -34,7 +34,7 @@ import "github.com/jmervine/GoT"
 {{node $ .Decl}}
 ```
 
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{end}}{{end}}{{/*
 
 ---------------------------------------
@@ -46,7 +46,7 @@ import "github.com/jmervine/GoT"
 {{node $ .Decl}}
 ```
 
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{end}}{{end}}{{/*
 
 ---------------------------------------
@@ -62,10 +62,10 @@ import "github.com/jmervine/GoT"
 {{range .Consts}}```go
 {{node $ .Decl}}
 ```
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{end}}
 {{range .Vars}}{{node $ .Decl}}
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{end}}
 {{example_text $ .Name "##### "}}
 {{range .Funcs}}#### {{.Name}}
@@ -73,14 +73,14 @@ import "github.com/jmervine/GoT"
 ```go
 {{node $ .Decl}}
 ```
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{example_text $ .Name  "##### "}}
 {{end}}{{range .Methods}}{{/* methods */}}#### {{.Name}}
 
 ```go
 {{node $ .Decl}}
 ```
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{$name := printf "%s_%s" $tname .Name}}
 {{if example_text $ $name ""}}
 {{example_text $ $name "##### "}}
@@ -95,7 +95,7 @@ import "github.com/jmervine/GoT"
 ```go
 {{node $ .Decl}}
 ```
-{{comment_text .Doc "" ""}}
+{{comment_text .Doc "" "    "}}
 {{example_text $ .Name "##### "}}
 {{end}}{{end}}{{/*
 
@@ -105,7 +105,7 @@ import "github.com/jmervine/GoT"
 {{range $marker, $content := .}}
 {{noteTitle $marker}}s
 
-{{range $content}}{{comment_text . "" ""}}
+{{range $content}}{{comment_text . "" "    "}}
 {{end}}{{end}}{{end}}{{end}}{{/*
 
 ---------------------------------------

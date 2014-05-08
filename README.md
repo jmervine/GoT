@@ -1,5 +1,5 @@
 
-# Go Test
+# GoTest
 
 [![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
 
@@ -31,7 +31,7 @@ Setup Examples:
     )
     func TestFoo(T *testing.T) {
        t := GoT.Go(T)
-       t.Assert(true, "should be true")
+       t.Assert(true)
     }
     // ------------------------------------------------ //
     // Global and authors perfered:
@@ -40,7 +40,7 @@ Setup Examples:
         "testing"
     )
     func TestFoo(T *testing.T) {
-       Go(T).Assert(true, "should be true")
+       Go(T).Assert(true)
        Go(T).Refute(false, "should be false")
     }
     // ------------------------------------------------ //
@@ -53,8 +53,11 @@ Setup Examples:
     var Go (func (*testing.T) *GoT.GoT) = GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
-       Go(T).Refute(false, "should be false")
+       Go(T).Refute(false)
     }
+
+Note: In assertions, if no message is passed, then a nice message will be
+displayed in an effor to be as clear as possible.
 
 
 ### Types
@@ -83,15 +86,22 @@ Go wraps "testing" to apply assertions.
 	//
 	T := new(testing.T)
 	
+	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
+	
+	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
 #### Assert
 
 ```go
-func (t *GoT) Assert(a bool, m string)
+func (t *GoT) Assert(args ...interface{})
 ```
 Assert checks for true.
+
+Expects:
+
+    Assert(a bool, optional_message string)
 
 
 
@@ -102,15 +112,20 @@ Assert checks for true.
 	//
 	T := new(testing.T)
 	
+	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
 
 
 #### AssertDeepEqual
 
 ```go
-func (t *GoT) AssertDeepEqual(a interface{}, b interface{}, m string)
+func (t *GoT) AssertDeepEqual(args ...interface{})
 ```
 AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
+
+Expects:
+
+    AssertDeepEqual(a interface{}, b interface{}, optional_message string)
 
 
 
@@ -124,15 +139,20 @@ AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
 	a1 := []string{"a"}
 	a2 := []string{"a"}
 	
+	Go(T).AssertDeepEqual(a1, a2)
 	Go(T).AssertDeepEqual(a1, a2, "should deep equal")
 
 
 #### AssertEqual
 
 ```go
-func (t *GoT) AssertEqual(a interface{}, b interface{}, m string)
+func (t *GoT) AssertEqual(args ...interface{})
 ```
 AssertEqual check for equality.
+
+Expects:
+
+    AssertEqual(a interface{}, b interface{}, optional_message string)
 
 
 
@@ -143,16 +163,21 @@ AssertEqual check for equality.
 	//
 	T := new(testing.T)
 	
+	Go(T).AssertEqual(1, 1)
 	Go(T).AssertEqual(1, 1, "should equal")
 
 
 #### AssertLength
 
 ```go
-func (t *GoT) AssertLength(a interface{}, n int, m string)
+func (t *GoT) AssertLength(args ...interface{})
 ```
 AssertLength checks for length equal to `n int`. If the type passed cannot be
 checked for length and error is logged stating as such.
+
+Expects:
+
+    AssertLength(a interface{}, n int, optional_message string)
 
 
 
@@ -163,15 +188,20 @@ checked for length and error is logged stating as such.
 	//
 	T := new(testing.T)
 	
+	Go(T).AssertLength("a", 1)
 	Go(T).AssertLength("a", 1, "should be length")
 
 
 #### AssertNil
 
 ```go
-func (t *GoT) AssertNil(a interface{}, m string)
+func (t *GoT) AssertNil(args ...interface{})
 ```
 AssertNil checks for nil.
+
+Expects:
+
+    AssertNil(a interface{}, optional_message string)
 
 
 
@@ -182,15 +212,20 @@ AssertNil checks for nil.
 	//
 	T := new(testing.T)
 	
+	Go(T).AssertNil(nil)
 	Go(T).AssertNil(nil, "should be nil")
 
 
 #### Refute
 
 ```go
-func (t *GoT) Refute(a bool, m string)
+func (t *GoT) Refute(args ...interface{})
 ```
 Refute checks for false.
+
+Expects:
+
+    Refute(a bool, optional_message string)
 
 
 
@@ -201,15 +236,20 @@ Refute checks for false.
 	//
 	T := new(testing.T)
 	
+	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
 
 #### RefuteDeepEqual
 
 ```go
-func (t *GoT) RefuteDeepEqual(a interface{}, b interface{}, m string)
+func (t *GoT) RefuteDeepEqual(args ...interface{})
 ```
 RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
+
+Expects:
+
+    RefuteDeepEqual(a interface{}, b interface{}, optional_message string)
 
 
 
@@ -223,15 +263,20 @@ RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
 	a1 := []string{"a"}
 	a2 := []string{"b"}
 	
+	Go(T).RefuteDeepEqual(a1, a2)
 	Go(T).RefuteDeepEqual(a1, a2, "should not deep equal")
 
 
 #### RefuteEqual
 
 ```go
-func (t *GoT) RefuteEqual(a interface{}, b interface{}, m string)
+func (t *GoT) RefuteEqual(args ...interface{})
 ```
 RefuteEqual checks for inequality.
+
+Expects:
+
+    RefuteEqual(a interface{}, b interface{}, optional_message string)
 
 
 
@@ -242,17 +287,22 @@ RefuteEqual checks for inequality.
 	//
 	T := new(testing.T)
 	
+	Go(T).RefuteEqual(1, 2)
 	Go(T).RefuteEqual(1, 2, "should not equal")
 
 
 #### RefuteLength
 
 ```go
-func (t *GoT) RefuteLength(a interface{}, n int, m string)
+func (t *GoT) RefuteLength(args ...interface{})
 ```
 RefuteLength checks for length not equal to `n int`. If the type passed cannot
 be checked for length this assertion will pass. (I'm not sure this is the best
 way to handle this, feedback is welcome.)
+
+Expects:
+
+    RefuteLength(a interface{}, n int, optional_message string)
 
 
 
@@ -263,15 +313,20 @@ way to handle this, feedback is welcome.)
 	//
 	T := new(testing.T)
 	
+	Go(T).RefuteLength("a", 0)
 	Go(T).RefuteLength("a", 0, "should not be length")
 
 
 #### RefuteNil
 
 ```go
-func (t *GoT) RefuteNil(a interface{}, m string)
+func (t *GoT) RefuteNil(args ...interface{})
 ```
 RefuteNil checks for not nil.
+
+Expects:
+
+    RefuteNil(a interface{}, optional_message string)
 
 
 
@@ -282,6 +337,7 @@ RefuteNil checks for not nil.
 	//
 	T := new(testing.T)
 	
+	Go(T).RefuteNil(1)
 	Go(T).RefuteNil(1, "should not be nil")
 
 

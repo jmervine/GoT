@@ -16,7 +16,7 @@ Setup Examples:
 
     func TestFoo(T *testing.T) {
        t := GoT.Go(T)
-       t.Assert(true, "should be true")
+       t.Assert(true)
     }
 
     // ------------------------------------------------ //
@@ -28,7 +28,7 @@ Setup Examples:
     )
 
     func TestFoo(T *testing.T) {
-       Go(T).Assert(true, "should be true")
+       Go(T).Assert(true)
        Go(T).Refute(false, "should be false")
     }
 
@@ -45,8 +45,12 @@ Setup Examples:
 
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
-       Go(T).Refute(false, "should be false")
+       Go(T).Refute(false)
     }
+
+
+Note: In assertions, if no message is passed, then a nice message will be displayed
+in an effor to be as clear as possible.
 
 */
 package GoT
@@ -78,81 +82,203 @@ func Go(T *testing.T) *GoT {
  ***************************************************/
 
 // Assert checks for true.
-func (t *GoT) Assert(a bool, m string) {
-    if !a {
-        t.error(m)
+//
+// Expects:
+//
+//   Assert(a bool, optional_message string)
+//
+func (t *GoT) Assert(args ...interface{}) {
+    var msg string
+    if len(args) == 2 && args[1].(string) != "" {
+        msg = args[1].(string)
+    } else {
+        msg = fmt.Sprintf("Assert expected true, got false")
+    }
+
+    if !args[0].(bool) {
+        t.error(msg)
     }
 }
 
 // Refute checks for false.
-func (t *GoT) Refute(a bool, m string) {
-    if a {
-        t.error(m)
+//
+// Expects:
+//
+//   Refute(a bool, optional_message string)
+//
+func (t *GoT) Refute(args ...interface{}) {
+    var msg string
+    if len(args) == 2 && args[1].(string) != "" {
+        msg = args[1].(string)
+    } else {
+        msg = fmt.Sprintf("Refute expected false, got true")
+    }
+
+    if args[0].(bool) {
+        t.error(msg)
     }
 }
 
 // AssertEqual check for equality.
-func (t *GoT) AssertEqual(a interface{}, b interface{}, m string) {
-    if pass, err := equal(a, b); err != "" {
+//
+// Expects:
+//
+//   AssertEqual(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) AssertEqual(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    } else {
+        msg = fmt.Sprintf("AssertEqual expected %v == %v", args...)
+    }
+
+    if pass, err := equal(args[0], args[1]); err != "" {
         t.error(err)
     } else if !pass {
-        t.error(m)
+        t.error(msg)
     }
 }
 
 // RefuteEqual checks for inequality.
-func (t *GoT) RefuteEqual(a interface{}, b interface{}, m string) {
-    if pass, err := equal(a, b); err != "" {
+//
+// Expects:
+//
+//   RefuteEqual(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) RefuteEqual(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    } else {
+        msg = fmt.Sprintf("RefuteEqual expected %v != %v", args...)
+    }
+
+    if pass, err := equal(args[0], args[1]); err != "" {
         t.error(err)
     } else if pass {
-        t.error(m)
+        t.error(msg)
     }
 }
 
 // AssertDeepEqual checks for simlarity (see: reflect.DeepEqual).
-func (t *GoT) AssertDeepEqual(a interface{}, b interface{}, m string) {
-    if !deepEqual(a, b) {
-        t.error(m)
+//
+// Expects:
+//
+//   AssertDeepEqual(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) AssertDeepEqual(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    } else {
+        msg = fmt.Sprintf("AssertDeepEqual expected %v deep equal %v", args...)
+    }
+
+    if !deepEqual(args[0], args[1]) {
+        t.error(msg)
     }
 }
 
 // RefuteDeepEqual checks for no simlarity (see: reflect.DeepEqual).
-func (t *GoT) RefuteDeepEqual(a interface{}, b interface{}, m string) {
-    if deepEqual(a, b) {
-        t.error(m)
+//
+// Expects:
+//
+//   RefuteDeepEqual(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) RefuteDeepEqual(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    } else {
+        msg = fmt.Sprintf("RefuteDeepEqual expected %v not deep equal %v", args...)
+    }
+
+    if deepEqual(args[0], args[1]) {
+        t.error(msg)
     }
 }
 
 // AssertNil checks for nil.
-func (t *GoT) AssertNil(a interface{}, m string) {
-    if !isNil(a) {
-        t.error(m)
+//
+// Expects:
+//
+//   AssertNil(a interface{}, optional_message string)
+//
+func (t *GoT) AssertNil(args ...interface{}) {
+    var msg string
+    if len(args) == 2 && args[1].(string) != "" {
+        msg = args[1].(string)
+    } else {
+        msg = fmt.Sprintf("AssertNil expected %v to be nil", args[0])
+    }
+
+    if !isNil(args[0]) {
+        t.error(msg)
     }
 }
 
 // RefuteNil checks for not nil.
-func (t *GoT) RefuteNil(a interface{}, m string) {
-    if isNil(a) {
-        t.error(m)
+//
+// Expects:
+//
+//   RefuteNil(a interface{}, optional_message string)
+//
+func (t *GoT) RefuteNil(args ...interface{}) {
+    var msg string
+    if len(args) == 2 && args[1].(string) != "" {
+        msg = args[1].(string)
+    } else {
+        msg = fmt.Sprintf("AssertNil expected %v not to be nil", args[0])
+    }
+
+    if isNil(args[0]) {
+        t.error(msg)
     }
 }
 
 // AssertLength checks for length equal to `n int`. If the type passed
 // cannot be checked for length and error is logged stating as such.
-func (t *GoT) AssertLength(a interface{}, n int, m string) {
-    if pass, err := checkLen(a, n); !pass && err != "" {
+//
+// Expects:
+//
+//   AssertLength(a interface{}, n int, optional_message string)
+//
+func (t *GoT) AssertLength(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    }
+
+    if pass, err := checkLen(args[0], args[1].(int)); !pass && err != "" {
         t.error(err)
     } else if !pass {
-        t.error(m)
+        if msg == "" {
+            l := reflect.ValueOf(args[0]).Len()
+            msg = fmt.Sprintf("AssertLength expected length of %d, got %d", args[1].(int), l)
+        }
+        t.error(msg)
     }
 }
 
 // RefuteLength checks for length not equal to `n int`. If the type passed
 // cannot be checked for length this assertion will pass. (I'm not sure
 // this is the best way to handle this, feedback is welcome.)
-func (t *GoT) RefuteLength(a interface{}, n int, m string) {
-    if pass, _ := checkLen(a, n); pass {
-        t.error(m)
+//
+// Expects:
+//
+//   RefuteLength(a interface{}, n int, optional_message string)
+//
+func (t *GoT) RefuteLength(args ...interface{}) {
+    var msg string
+    if len(args) == 3 && args[2].(string) != "" {
+        msg = args[2].(string)
+    } else {
+        msg = fmt.Sprintf("RefuteLength expected length to not be %d", args[1].(int))
+    }
+
+    if pass, _ := checkLen(args[0], args[1].(int)); pass {
+        t.error(msg)
     }
 }
 

@@ -6,15 +6,25 @@ import (
 )
 
 func TestBool(T *testing.T) {
+    Go(T).Assert(b1)
     Go(T).Assert(b1, "bool: assert")
+
+    Go(T).Refute(b3)
     Go(T).Refute(b3, "bool: refute")
 
+    Go(T).AssertEqual(b1, b2)
     Go(T).AssertEqual(b1, b2, "bool: assert equal")
+
+    Go(T).RefuteEqual(b1, b3)
     Go(T).RefuteEqual(b1, b3, "bool: refute equal")
 
+    Go(T).AssertDeepEqual(b1, b2)
     Go(T).AssertDeepEqual(b1, b2, "bool: assert deep equal")
+
+    Go(T).RefuteDeepEqual(b1, b3)
     Go(T).RefuteDeepEqual(b1, b3, "bool: refute deep equal")
 
+    Go(T).RefuteNil(b1)
     Go(T).RefuteNil(b1, "bool: refute nil")
 }
 
@@ -54,7 +64,10 @@ func TestString(T *testing.T) {
     Go(T).AssertDeepEqual(s1, s2, "string: assert deep equal")
     Go(T).RefuteDeepEqual(s1, s3, "string: assert deep equal")
 
+    Go(T).AssertLength(s1, 4)
     Go(T).AssertLength(s1, 4, "string: assert length")
+
+    Go(T).RefuteLength(s1, 0)
     Go(T).RefuteLength(s1, 0, "string: assert length")
 
     Go(T).RefuteNil(s1, "string: refute nil")
