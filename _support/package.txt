@@ -7,7 +7,7 @@
 
 [![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
 
-<center>![GoT](http://cdn.mervine.net/GoT.jpg)]</center>
+<center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
 
 #### Simple Assertion wrapper for Go's built in "testing" package.
 

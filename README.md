@@ -3,7 +3,7 @@
 
 [![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
 
-<center>![GoT](http://cdn.mervine.net/GoT.jpg)]</center>
+<center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
 
 #### Simple Assertion wrapper for Go's built in "testing" package.
 
@@ -34,23 +34,23 @@ Setup Examples:
        t.Assert(true, "should be true")
     }
     // ------------------------------------------------ //
-    // Global:
-    //
+    // Global and authors perfered:
     import (
-        "github.com/jmervine/GoT"
+        . "github.com/jmervine/GoT"
         "testing"
     )
-    var Go := GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
        Go(T).Refute(false, "should be false")
     }
     // ------------------------------------------------ //
-    // Authors Perfered:
+    // Global (but ugly):
+    //
     import (
-        . "github.com/jmervine/GoT"
+        "github.com/jmervine/GoT"
         "testing"
     )
+    var Go (func (*testing.T) *GoT.GoT) = GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
        Go(T).Refute(false, "should be false")

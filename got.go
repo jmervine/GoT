@@ -20,7 +20,20 @@ Setup Examples:
     }
 
     // ------------------------------------------------ //
-    // Global:
+    // Global and authors perfered:
+
+    import (
+        . "github.com/jmervine/GoT"
+        "testing"
+    )
+
+    func TestFoo(T *testing.T) {
+       Go(T).Assert(true, "should be true")
+       Go(T).Refute(false, "should be false")
+    }
+
+    // ------------------------------------------------ //
+    // Global (but ugly):
     //
 
     import (
@@ -28,19 +41,7 @@ Setup Examples:
         "testing"
     )
 
-    var Go := GoT.Go
-    func TestFoo(T *testing.T) {
-       Go(T).Assert(true, "should be true")
-       Go(T).Refute(false, "should be false")
-    }
-
-    // ------------------------------------------------ //
-    // Authors Perfered:
-
-    import (
-        . "github.com/jmervine/GoT"
-        "testing"
-    )
+    var Go (func (*testing.T) *GoT.GoT) = GoT.Go
 
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
