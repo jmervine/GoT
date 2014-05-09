@@ -1,6 +1,7 @@
 package GoT
 
 import (
+    "fmt"
     "strings"
     "testing"
 )
@@ -468,6 +469,46 @@ func TestRefuteHasKey(t *testing.T) {
     }
 }
 
+func TestEqual(t *testing.T) {
+    pass, msg := Equal("a", "a")
+
+    if !pass {
+        t.Error("expected equal to pass")
+    }
+
+    if msg != "" {
+        t.Error("expected msg to be empty")
+    }
+
+    pass, msg = Equal("a", "b")
+    if pass {
+        t.Error("expected equal to fail")
+    }
+    if msg != "" {
+        t.Error("expected msg to be empty")
+    }
+
+    pass, msg = Equal([]string{"a"}, []string{"a"})
+    if pass {
+        t.Error("expected equal to fail")
+    }
+    if !strings.Contains(msg, "runtime error: comparing uncomparable type") {
+        t.Error("expected msg to have run time error")
+    }
+}
+
+func TestDeepEqual(t *testing.T) {
+    // limiting testing as it's a simple wrapper for reflect.DeepEqual
+
+    if !DeepEqual("a", "a") {
+        t.Error("expected deep equal to pass")
+    }
+
+    if DeepEqual("a", 1) {
+        t.Error("expected deep equal to fail")
+    }
+}
+
 func TestAllFailureConditions(T *testing.T) {
     // Uncomment when testing changes to failure messaging.
     //
@@ -531,35 +572,7 @@ func Test_message(t *testing.T) {
     }
 }
 
-func Test_equal(t *testing.T) {
-    pass, msg := equal("a", "a")
-
-    if !pass {
-        t.Error("expected equal to pass")
-    }
-
-    if msg != "" {
-        t.Error("expected msg to be empty")
-    }
-
-    pass, msg = equal("a", "b")
-    if pass {
-        t.Error("expected equal to fail")
-    }
-    if msg != "" {
-        t.Error("expected msg to be empty")
-    }
-
-    pass, msg = equal([]string{"a"}, []string{"a"})
-    if pass {
-        t.Error("expected equal to fail")
-    }
-    if !strings.Contains(msg, "runtime error: comparing uncomparable type") {
-        t.Error("expected msg to have run time error")
-    }
-}
-
-func Test_deepEqual(t *testing.T) {
+func Test_DeepEqual(t *testing.T) {
 
     a1 := []string{"a"}
     a2 := []string{"a"}
@@ -571,17 +584,17 @@ func Test_deepEqual(t *testing.T) {
     m3 := map[string]int{"a": 1}
     m4 := map[string]int{"a": 1}
 
-    if !deepEqual(a1, a2) {
-        t.Error("deepEqual should pass")
+    if !DeepEqual(a1, a2) {
+        t.Error("DeepEqual should pass")
     }
-    if !deepEqual(a3, a4) {
-        t.Error("deepEqual should pass")
+    if !DeepEqual(a3, a4) {
+        t.Error("DeepEqual should pass")
     }
-    if !deepEqual(m1, m2) {
-        t.Error("deepEqual should pass")
+    if !DeepEqual(m1, m2) {
+        t.Error("DeepEqual should pass")
     }
-    if !deepEqual(m3, m4) {
-        t.Error("deepEqual should pass")
+    if !DeepEqual(m3, m4) {
+        t.Error("DeepEqual should pass")
     }
 
     a2 = []string{"b"}
@@ -589,28 +602,28 @@ func Test_deepEqual(t *testing.T) {
     m2 = map[string]string{"a": "c"}
     m4 = map[string]int{"a": 2}
 
-    if deepEqual(a1, a2) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(a1, a2) {
+        t.Error("DeepEqual should fail")
     }
-    if deepEqual(a3, a4) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(a3, a4) {
+        t.Error("DeepEqual should fail")
     }
-    if deepEqual(m1, m2) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(m1, m2) {
+        t.Error("DeepEqual should fail")
     }
-    if deepEqual(m3, m4) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(m3, m4) {
+        t.Error("DeepEqual should fail")
     }
 
-    if deepEqual(a1, a3) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(a1, a3) {
+        t.Error("DeepEqual should fail")
     }
-    if deepEqual(a1, m1) {
-        t.Error("deepEqual should fail")
+    if DeepEqual(a1, m1) {
+        t.Error("DeepEqual should fail")
     }
 }
 
-func Test_isNil(t *testing.T) {
+func Test_IsNil(t *testing.T) {
 
     var (
         i   interface{}
@@ -622,27 +635,27 @@ func Test_isNil(t *testing.T) {
         b   bool
     )
 
-    if !isNil(i) {
-        t.Error("expected isNil to pass")
+    if !IsNil(i) {
+        t.Error("expected IsNil to pass")
     }
-    if !isNil(a) {
-        t.Error("expected isNil to pass")
+    if !IsNil(a) {
+        t.Error("expected IsNil to pass")
     }
-    if !isNil(m) {
-        t.Error("expected isNil to pass")
+    if !IsNil(m) {
+        t.Error("expected IsNil to pass")
     }
 
-    if isNil(s) {
-        t.Error("expected isNil to fail")
+    if IsNil(s) {
+        t.Error("expected IsNil to fail")
     }
-    if isNil(n) {
-        t.Error("expected isNil to fail")
+    if IsNil(n) {
+        t.Error("expected IsNil to fail")
     }
-    if isNil(f) {
-        t.Error("expected isNil to fail")
+    if IsNil(f) {
+        t.Error("expected IsNil to fail")
     }
-    if isNil(b) {
-        t.Error("expected isNil to fail")
+    if IsNil(b) {
+        t.Error("expected IsNil to fail")
     }
 
     // structs
@@ -651,15 +664,15 @@ func Test_isNil(t *testing.T) {
 
     tt := new(Type)
 
-    if isNil(tt) {
-        t.Error("expected isNil to fail")
+    if IsNil(tt) {
+        t.Error("expected IsNil to fail")
     }
-    if !isNil(tp) {
-        t.Error("expected isNil to fail")
+    if !IsNil(tp) {
+        t.Error("expected IsNil to fail")
     }
 }
 
-func Test_checkLen(t *testing.T) {
+func Test_CheckLen(t *testing.T) {
 
     a1 := []string{"a"}
     a2 := []int{1}
@@ -669,82 +682,82 @@ func Test_checkLen(t *testing.T) {
 
     s := "a"
 
-    if pass, msg := checkLen(a1, 1); !pass || msg != "" {
-        t.Error("expected checkLen to pass without messaging")
+    if pass, msg := CheckLen(a1, 1); !pass || msg != "" {
+        t.Error("expected CheckLen to pass without messaging")
     }
-    if pass, msg := checkLen(a2, 1); !pass || msg != "" {
-        t.Error("expected checkLen to pass without messaging")
+    if pass, msg := CheckLen(a2, 1); !pass || msg != "" {
+        t.Error("expected CheckLen to pass without messaging")
     }
-    if pass, msg := checkLen(m1, 1); !pass || msg != "" {
-        t.Error("expected checkLen to pass without messaging")
+    if pass, msg := CheckLen(m1, 1); !pass || msg != "" {
+        t.Error("expected CheckLen to pass without messaging")
     }
-    if pass, msg := checkLen(m2, 1); !pass || msg != "" {
-        t.Error("expected checkLen to pass without messaging")
+    if pass, msg := CheckLen(m2, 1); !pass || msg != "" {
+        t.Error("expected CheckLen to pass without messaging")
     }
-    if pass, msg := checkLen(s, 1); !pass || msg != "" {
-        t.Error("expected checkLen to pass without messaging")
+    if pass, msg := CheckLen(s, 1); !pass || msg != "" {
+        t.Error("expected CheckLen to pass without messaging")
     }
 
-    if pass, _ := checkLen(a1, 0); pass {
-        t.Error("expected checkLen to fail")
+    if pass, _ := CheckLen(a1, 0); pass {
+        t.Error("expected CheckLen to fail")
     }
-    if pass, _ := checkLen(a2, 0); pass {
-        t.Error("expected checkLen to fail")
+    if pass, _ := CheckLen(a2, 0); pass {
+        t.Error("expected CheckLen to fail")
     }
-    if pass, _ := checkLen(m1, 0); pass {
-        t.Error("expected checkLen to fail")
+    if pass, _ := CheckLen(m1, 0); pass {
+        t.Error("expected CheckLen to fail")
     }
-    if pass, _ := checkLen(m2, 0); pass {
-        t.Error("expected checkLen to fail")
+    if pass, _ := CheckLen(m2, 0); pass {
+        t.Error("expected CheckLen to fail")
     }
-    if pass, _ := checkLen(s, 0); pass {
-        t.Error("expected checkLen to fail")
+    if pass, _ := CheckLen(s, 0); pass {
+        t.Error("expected CheckLen to fail")
     }
 }
 
-func Test_hasKey(t *testing.T) {
+func Test_HasKey(t *testing.T) {
     m1 := map[string]string{"a": "b"}
     m2 := map[int]string{1: "b"}
 
     // m1
-    if pass, _ := hasKey(m1, "a"); !pass {
-        t.Error("expected hasKey to pass")
+    if pass, _ := HasKey(m1, "a"); !pass {
+        t.Error("expected HasKey to pass")
     }
 
-    if pass, _ := hasKey(m1, "b"); pass {
-        t.Error("expected hasKey to fail")
+    if pass, _ := HasKey(m1, "b"); pass {
+        t.Error("expected HasKey to fail")
     }
 
     // m2
-    if pass, _ := hasKey(m2, 1); !pass {
-        t.Error("expected hasKey to pass")
+    if pass, _ := HasKey(m2, 1); !pass {
+        t.Error("expected HasKey to pass")
     }
 
-    if pass, _ := hasKey(m2, 2); pass {
-        t.Error("expected hasKey to fail")
+    if pass, _ := HasKey(m2, 2); pass {
+        t.Error("expected HasKey to fail")
     }
-    if pass, _ := hasKey(m2, "1"); pass {
-        t.Error("expected hasKey to fail")
+    if pass, _ := HasKey(m2, "1"); pass {
+        t.Error("expected HasKey to fail")
     }
 }
 
-func Test_contains(t *testing.T) {
+func Test_Contains(t *testing.T) {
     s1 := "asdf"
     s2 := "a"
     s3 := "q"
 
-    if pass, _ := contains(s1, s1); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(s1, s1); !pass {
+        t.Error("expected Contains to pass")
     }
-    if pass, _ := contains(s1, s2); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(s1, s2); !pass {
+        t.Error("expected Contains to pass")
     }
 
-    if pass, _ := contains(s1, s3); pass {
-        t.Error("expected contains to fail")
+    if pass, _ := Contains(s1, s3); pass {
+        t.Error("expected Contains to fail")
     }
-    if pass, _ := contains(s2, s1); pass {
-        t.Error("expected contains to fail")
+    if pass, _ := Contains(s2, s1); pass {
+        t.Error("expected Contains to fail")
     }
 
     a1 := [1]string{"a"}
@@ -752,35 +765,36 @@ func Test_contains(t *testing.T) {
     a3 := []string{"a"}
     a4 := []int{1}
 
-    if pass, _ := contains(a1, "a"); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(a1, "a"); !pass {
+        t.Error("expected Contains to pass")
     }
-    if pass, _ := contains(a2, 1); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(a2, 1); !pass {
+        t.Error("expected Contains to pass")
     }
-    if pass, _ := contains(a3, "a"); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(a3, "a"); !pass {
+        t.Error("expected Contains to pass")
     }
-    if pass, _ := contains(a4, 1); !pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(a4, 1); !pass {
+        t.Error("expected Contains to pass")
     }
 
-    if pass, _ := contains(a1, "q"); pass {
-        t.Error("expected contains to pass")
+    if pass, _ := Contains(a1, "q"); pass {
+        t.Error("expected Contains to pass")
     }
-    if pass, _ := contains(a2, 2); pass {
-        t.Error("expected contains to fail")
+    if pass, _ := Contains(a2, 2); pass {
+        t.Error("expected Contains to fail")
     }
-    if pass, _ := contains(a3, "q"); pass {
-        t.Error("expected contains to fail")
+    if pass, _ := Contains(a3, "q"); pass {
+        t.Error("expected Contains to fail")
     }
-    if pass, _ := contains(a4, 2); pass {
-        t.Error("expected contains to fail")
+    if pass, _ := Contains(a4, 2); pass {
+        t.Error("expected Contains to fail")
     }
 }
 
 // Examples
 var T = new(testing.T)
+var t = new(testing.T)
 
 func ExampleGoT_Assert() {
     // T comes from:
@@ -902,6 +916,107 @@ func ExampleGoT_RefuteContains() {
 
     // Alias:
     Go(T).RefuteHas("asdf", "q")
+}
+
+func ExampleGoT_AssertHasKey() {
+    // T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+
+    Go(T).AssertHasKey(map[string]string{"a": "a"}, "a")
+    Go(T).AssertHasKey(map[int]string{1: "a"}, 1)
+}
+
+func ExampleGoT_RefuteHasKey() {
+    // T comes from:
+    //
+    //     func TestFoo(T *testing.T)
+
+    Go(T).RefuteHasKey(map[string]string{"a": "a"}, "b")
+    Go(T).RefuteHasKey(map[int]string{1: "a"}, 2)
+}
+
+func ExampleEqual() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    if pass, err := Equal("a", "a"); err != "" {
+        t.Error(err)
+    } else if !pass {
+        t.Error("a should equal a")
+    }
+}
+
+func ExampleDeepEqual() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    if pass := DeepEqual("a", "a"); !pass {
+        t.Error("a should deep equal a")
+    }
+}
+
+func ExampleIsNil() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    if pass := IsNil("a"); pass {
+        t.Error("a should not be nil")
+    }
+}
+
+func ExampleCheckLen() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    var a [1]int
+    if pass, err := CheckLen(a, 1); err != "" {
+        t.Error(err)
+    } else if !pass {
+        t.Error("should have len of one")
+    }
+
+    _, err := CheckLen(1, 1)
+    fmt.Println(err)
+
+    // Output:
+    // obtained value type has no length
+}
+
+func ExampleContains() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    var a [1]int
+    if pass, err := Contains(a, 1); err != "" {
+        t.Error(err)
+    } else if pass {
+        t.Error("should not have one")
+    }
+}
+
+func ExampleHasKey() {
+    // Example in testing situation.
+    //
+    // t comes from:
+    //
+    //     func TestFoo(t *testing.T)
+    m := map[string]string{"a": "a"}
+    if pass, err := HasKey(m, "a"); err != "" {
+        t.Error(err)
+    } else if !pass {
+        t.Error("map should have key a")
+    }
 }
 
 func ExampleGo() {

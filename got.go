@@ -19,6 +19,15 @@ Setup Examples:
        t.Assert(true)
     }
 
+    // or just the helpers //
+    func TestBar(t *testing.T) {
+        if ok, err := GoT.Equal("a", "a"); err != "" {
+            t.Error(err)
+        } else if {
+            t.Error("expected equality")
+        }
+    }
+
     // ------------------------------------------------ //
     // Global and authors perfered:
 
@@ -119,7 +128,7 @@ func (t *GoT) Refute(args ...interface{}) {
 func (t *GoT) AssertEqual(args ...interface{}) {
     msg := message(3, fmt.Sprintf("AssertEqual expected %v == %v", args...), args...)
 
-    if pass, err := equal(args[0], args[1]); err != "" {
+    if pass, err := Equal(args[0], args[1]); err != "" {
         t.error(err)
     } else if !pass {
         t.error(msg)
@@ -135,7 +144,7 @@ func (t *GoT) AssertEqual(args ...interface{}) {
 func (t *GoT) RefuteEqual(args ...interface{}) {
     msg := message(3, fmt.Sprintf("RefuteEqual expected %v != %v", args...), args...)
 
-    if pass, err := equal(args[0], args[1]); err != "" {
+    if pass, err := Equal(args[0], args[1]); err != "" {
         t.error(err)
     } else if pass {
         t.error(msg)
@@ -153,7 +162,7 @@ func (t *GoT) RefuteEqual(args ...interface{}) {
 func (t *GoT) AssertDeepEqual(args ...interface{}) {
     msg := message(3, "AssertDeepEqual expected deep equal check to succeed", args...)
 
-    if !deepEqual(args[0], args[1]) {
+    if !DeepEqual(args[0], args[1]) {
         t.error(msg)
     }
 }
@@ -169,7 +178,7 @@ func (t *GoT) AssertDeepEqual(args ...interface{}) {
 func (t *GoT) RefuteDeepEqual(args ...interface{}) {
     msg := message(3, "RefuteDeepEqual expected deep equal check to fail", args...)
 
-    if deepEqual(args[0], args[1]) {
+    if DeepEqual(args[0], args[1]) {
         t.error(msg)
     }
 }
@@ -183,7 +192,7 @@ func (t *GoT) RefuteDeepEqual(args ...interface{}) {
 func (t *GoT) AssertNil(args ...interface{}) {
     msg := message(2, fmt.Sprintf("AssertNil expected %v to be nil", args[0]), args...)
 
-    if !isNil(args[0]) {
+    if !IsNil(args[0]) {
         t.error(msg)
     }
 }
@@ -197,7 +206,7 @@ func (t *GoT) AssertNil(args ...interface{}) {
 func (t *GoT) RefuteNil(args ...interface{}) {
     msg := message(2, fmt.Sprintf("RefuteNil expected %v not to be nil", args[0]), args...)
 
-    if isNil(args[0]) {
+    if IsNil(args[0]) {
         t.error(msg)
     }
 }
@@ -216,7 +225,7 @@ func (t *GoT) AssertLength(args ...interface{}) {
         msg = args[2].(string)
     }
 
-    if pass, err := checkLen(args[0], args[1].(int)); !pass && err != "" {
+    if pass, err := CheckLen(args[0], args[1].(int)); !pass && err != "" {
         t.error(err)
     } else if !pass {
         if msg == "" {
@@ -238,7 +247,7 @@ func (t *GoT) AssertLength(args ...interface{}) {
 func (t *GoT) RefuteLength(args ...interface{}) {
     msg := message(3, fmt.Sprintf("RefuteLength expected length to not be %d", args[1]), args...)
 
-    if pass, _ := checkLen(args[0], args[1].(int)); pass {
+    if pass, _ := CheckLen(args[0], args[1].(int)); pass {
         t.error(msg)
     }
 }
@@ -285,7 +294,7 @@ func (t *GoT) RefuteHas(args ...interface{}) {
 func (t *GoT) AssertHasKey(args ...interface{}) {
     msg := message(3, fmt.Sprintf("AssertHasKey expected key %v", args[1]), args...)
 
-    if pass, err := hasKey(args[0], args[1]); !pass && err != "" {
+    if pass, err := HasKey(args[0], args[1]); !pass && err != "" {
         t.error(err)
     } else if !pass {
         t.error(msg)
@@ -302,20 +311,108 @@ func (t *GoT) AssertHasKey(args ...interface{}) {
 func (t *GoT) RefuteHasKey(args ...interface{}) {
     msg := message(3, fmt.Sprintf("RefuteHasKey did not expect key %v", args[1]), args...)
 
-    if pass, _ := hasKey(args[0], args[1]); pass {
+    if pass, _ := HasKey(args[0], args[1]); pass {
         t.error(msg)
     }
 }
 
 // TODO:
 //
-// For map's only:
-// - AssertHasKey
-// - RefuteHeyKey
-//
 // For map's, array's, strings and maybe structs.
 // - AssertHasVal
 // - RefuteHasVal
+
+/**
+ * Exporting Helpers for manual use.
+ ***************************************************/
+
+// Equal is used for checking equality.
+func Equal(a interface{}, b interface{}) (check bool, err string) {
+    defer func() {
+        if catch := recover(); catch != nil {
+            check = false
+            err = fmt.Sprint(catch)
+        }
+    }()
+
+    return a == b, ""
+}
+
+// DeepEqual calls reflect.DeepEqual, exporting for constancy only.
+func DeepEqual(a interface{}, b interface{}) bool {
+    return reflect.DeepEqual(a, b)
+}
+
+// IsNil checks for nil.
+func IsNil(a interface{}) bool {
+    if a == nil {
+        return true
+    }
+    switch value := reflect.ValueOf(a); value.Kind() {
+    case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
+        return value.IsNil()
+    }
+    return false
+}
+
+// CheckLen checks length of the first argument based on the second. If the type
+// being checked isn't a valid type for length check, then a message is returned
+// stating such and the check fails.
+func CheckLen(a interface{}, n int) (bool, string) {
+    value := reflect.ValueOf(a)
+    switch value.Kind() {
+    case reflect.Map, reflect.Array, reflect.Slice, reflect.Chan, reflect.String:
+        return value.Len() == n, ""
+    default:
+        return false, "obtained value type has no length"
+    }
+}
+
+// Contains checks to see if the string, array or slice passed in the first
+// argument contains the correctly typed value of the second argument. If the type
+// passed is unsupported or some panic occurs while performing the check, a message
+// will be returned as a string.
+func Contains(a interface{}, b interface{}) (check bool, err string) {
+    defer func() {
+        if catch := recover(); catch != nil {
+            check = false
+            err = fmt.Sprint(catch)
+        }
+    }()
+
+    haystack := reflect.ValueOf(a)
+    needle := reflect.ValueOf(b)
+
+    switch haystack.Kind() {
+    case reflect.String:
+        return strings.Contains(a.(string), b.(string)), ""
+    case reflect.Array, reflect.Slice:
+        for i := 0; i < haystack.Len(); i++ {
+            // convert to two comparable types
+            if haystack.Index(i).Interface() == needle.Interface() {
+                return true, ""
+            }
+        }
+    default:
+        return false, fmt.Sprintf("assertion error: Contains doesn't support %v", haystack.Kind())
+    }
+
+    return false, ""
+}
+
+// HasKey checks to see if the map passed via the first argument has the
+// correctly typed argument of the the second. Panics due to type mismatches
+// will be passed back as an error string.
+func HasKey(m interface{}, a interface{}) (check bool, err string) {
+    defer func() {
+        if catch := recover(); catch != nil {
+            check = false
+            err = fmt.Sprint(catch)
+        }
+    }()
+
+    return reflect.ValueOf(m).MapIndex(reflect.ValueOf(a)).IsValid(), ""
+}
 
 /**
  * Helpers
@@ -356,83 +453,10 @@ func (t *GoT) error(args ...interface{}) {
     t.t.Error(err)
 }
 
-// equal is a helper method for checking equality.
-func equal(a interface{}, b interface{}) (check bool, err string) {
-    defer func() {
-        if catch := recover(); catch != nil {
-            check = false
-            err = fmt.Sprint(catch)
-        }
-    }()
-
-    check = a == b
-    err = ""
-
-    return check, err
-}
-
-// deepEqual is a helper method for checking deep equality.
-func deepEqual(a interface{}, b interface{}) bool {
-    return reflect.DeepEqual(a, b)
-}
-
-// isNil is a helper method for checking for nil.
-func isNil(a interface{}) bool {
-    if a == nil {
-        return true
-    }
-    switch value := reflect.ValueOf(a); value.Kind() {
-    case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice:
-        return value.IsNil()
-    }
-    return false
-}
-
-// checkLen is a helper method for checking length.
-func checkLen(a interface{}, n int) (bool, string) {
-    value := reflect.ValueOf(a)
-    switch value.Kind() {
-    case reflect.Map, reflect.Array, reflect.Slice, reflect.Chan, reflect.String:
-        return value.Len() == n, ""
-    default:
-        return false, "obtained value type has no length"
-    }
-}
-
-// contains is a helper to check to see if a string, array or slice
-// contains the correctly typed element.
-func contains(a interface{}, b interface{}) (check bool, err string) {
-    defer func() {
-        if catch := recover(); catch != nil {
-            check = false
-            err = fmt.Sprint(catch)
-        }
-    }()
-
-    haystack := reflect.ValueOf(a)
-    needle := reflect.ValueOf(b)
-
-    switch haystack.Kind() {
-    case reflect.String:
-        return strings.Contains(a.(string), b.(string)), ""
-    case reflect.Array, reflect.Slice:
-        for i := 0; i < haystack.Len(); i++ {
-            // convert to two comparable types
-            if haystack.Index(i).Interface() == needle.Interface() {
-                return true, ""
-            }
-        }
-    default:
-        return false, fmt.Sprintf("assertion error: contains doesn't support %v", haystack.Kind())
-    }
-
-    return false, ""
-}
-
 // assertContains is the real assertion, allowing for aliasing.
 func (t *GoT) assertContains(name string, args ...interface{}) {
     msg := message(3, fmt.Sprintf(name+" expected \"%v\" to contain \"%v\"", args...), args...)
-    if pass, err := contains(args[0], args[1]); !pass && err != "" {
+    if pass, err := Contains(args[0], args[1]); !pass && err != "" {
         t.error(err, 3)
     } else if !pass {
         t.error(msg, 3)
@@ -442,19 +466,7 @@ func (t *GoT) assertContains(name string, args ...interface{}) {
 // refuteContains is the real assertion, allowing for aliasing.
 func (t *GoT) refuteContains(name string, args ...interface{}) {
     msg := message(3, fmt.Sprintf(name+" expected \"%v\" to not contain \"%v\"", args...), args...)
-    if pass, _ := contains(args[0], args[1]); pass {
+    if pass, _ := Contains(args[0], args[1]); pass {
         t.error(msg, 3)
     }
-}
-
-// hasKey is a helper to check to see if a map has a key.
-func hasKey(m interface{}, a interface{}) (check bool, err string) {
-    defer func() {
-        if catch := recover(); catch != nil {
-            check = false
-            err = fmt.Sprint(catch)
-        }
-    }()
-
-    return reflect.ValueOf(m).MapIndex(reflect.ValueOf(a)).IsValid(), ""
 }

@@ -33,6 +33,14 @@ Setup Examples:
        t := GoT.Go(T)
        t.Assert(true)
     }
+    // or just the helpers //
+    func TestBar(t *testing.T) {
+        if ok, err := GoT.Equal("a", "a"); err != "" {
+            t.Error(err)
+        } else if {
+            t.Error("expected equality")
+        }
+    }
     // ------------------------------------------------ //
     // Global and authors perfered:
     import (
@@ -72,6 +80,8 @@ type GoT struct {
 
 
 
+
+### Functions
 #### Go
 
 ```go
@@ -117,7 +127,7 @@ Expects:
 ```go
 func (t *GoT) AssertContains(args ...interface{})
 ```
-AssertContains checks for the existence of the second element inside the first
+AssertContains checks for the existence of the second argument inside the first
 string, array or slice.
 
 Expects:
@@ -196,6 +206,29 @@ AssertHas is an alias for AssertContains
 
 
 
+#### AssertHasKey
+
+```go
+func (t *GoT) AssertHasKey(args ...interface{})
+```
+AssertHasKey checks for the existence of the second argument as a key for the
+first argument; supports maps only.
+
+Expects:
+
+    RefuteContains(a interface{}, b interface{}, optional_message string)
+
+
+
+##### Example:
+	// T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	
+	Go(T).AssertHasKey(map[string]string{"a": "a"}, "a")
+	Go(T).AssertHasKey(map[int]string{1: "a"}, 1)
+
+
 #### AssertLength
 
 ```go
@@ -268,7 +301,7 @@ Expects:
 ```go
 func (t *GoT) RefuteContains(args ...interface{})
 ```
-RefuteContains checks for the non-existence of the second element inside the
+RefuteContains checks for the non-existence of the second argument inside the
 first string, array or slice.
 
 Expects:
@@ -348,6 +381,29 @@ RefuteHas is an alias for RefuteContains
 
 
 
+#### RefuteHasKey
+
+```go
+func (t *GoT) RefuteHasKey(args ...interface{})
+```
+RefuteHasKey checks for the existence of the second argument as a key for the
+first argument; supports maps only.
+
+Expects:
+
+    RefuteContains(a interface{}, b interface{}, optional_message string)
+
+
+
+##### Example:
+	// T comes from:
+	//
+	//     func TestFoo(T *testing.T)
+	
+	Go(T).RefuteHasKey(map[string]string{"a": "a"}, "b")
+	Go(T).RefuteHasKey(map[int]string{1: "a"}, 2)
+
+
 #### RefuteLength
 
 ```go
@@ -393,5 +449,132 @@ Expects:
 	Go(T).RefuteNil(1)
 	Go(T).RefuteNil(1, "should not be nil")
 
+
+
+#### CheckLen
+
+```go
+func CheckLen(a interface{}, n int) (bool, string)
+```
+CheckLen checks length of the first argument based on the second. If the type
+being checked isn't a valid type for length check, then a message is returned
+stating such and the check fails.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	var a [1]int
+	if pass, err := CheckLen(a, 1); err != "" {
+	    t.Error(err)
+	} else if !pass {
+	    t.Error("should have len of one")
+	}
+	
+	_, err := CheckLen(1, 1)
+	fmt.Println(err)
+	
+	// Output:
+	// obtained value type has no length
+
+#### Contains
+
+```go
+func Contains(a interface{}, b interface{}) (check bool, err string)
+```
+Contains checks to see if the string, array or slice passed in the first
+argument contains the correctly typed value of the second argument. If the type
+passed is unsupported or some panic occurs while performing the check, a message
+will be returned as a string.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	var a [1]int
+	if pass, err := Contains(a, 1); err != "" {
+	    t.Error(err)
+	} else if pass {
+	    t.Error("should not have one")
+	}
+
+#### DeepEqual
+
+```go
+func DeepEqual(a interface{}, b interface{}) bool
+```
+DeepEqual calls reflect.DeepEqual, exporting for constancy only.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	if pass := DeepEqual("a", "a"); !pass {
+	    t.Error("a should deep equal a")
+	}
+
+#### Equal
+
+```go
+func Equal(a interface{}, b interface{}) (check bool, err string)
+```
+Equal is used for checking equality.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	if pass, err := Equal("a", "a"); err != "" {
+	    t.Error(err)
+	} else if !pass {
+	    t.Error("a should equal a")
+	}
+
+#### HasKey
+
+```go
+func HasKey(m interface{}, a interface{}) (check bool, err string)
+```
+HasKey checks to see if the map passed via the first argument has the correctly
+typed argument of the the second. Panics due to type mismatches will be passed
+back as an error string.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	m := map[string]string{"a": "a"}
+	if pass, err := HasKey(m, "a"); err != "" {
+	    t.Error(err)
+	} else if !pass {
+	    t.Error("map should have key a")
+	}
+
+#### IsNil
+
+```go
+func IsNil(a interface{}) bool
+```
+IsNil checks for nil.
+
+##### Example:
+	// Example in testing situation.
+	//
+	// t comes from:
+	//
+	//     func TestFoo(t *testing.T)
+	if pass := IsNil("a"); pass {
+	    t.Error("a should not be nil")
+	}
 
 

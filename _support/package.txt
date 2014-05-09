@@ -68,6 +68,8 @@ import "github.com/jmervine/GoT"
 {{comment_text .Doc "" "    "}}
 {{end}}
 {{example_text $ .Name "##### "}}
+
+### Functions
 {{range .Funcs}}#### {{.Name}}
 
 ```go
