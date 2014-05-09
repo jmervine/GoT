@@ -243,7 +243,7 @@ func (t *GoT) RefuteLength(args ...interface{}) {
     }
 }
 
-// AssertContains checks for the existence of the second element inside
+// AssertContains checks for the existence of the second argument inside
 // the first string, array or slice.
 //
 // Expects:
@@ -259,17 +259,7 @@ func (t *GoT) AssertHas(args ...interface{}) {
     t.assertContains("AssertHas", args...)
 }
 
-// assertContains is the real assertion, allowing for aliasing.
-func (t *GoT) assertContains(name string, args ...interface{}) {
-    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to contain \"%v\"", args...), args...)
-    if pass, err := contains(args[0], args[1]); !pass && err != "" {
-        t.error(err, 3)
-    } else if !pass {
-        t.error(msg, 3)
-    }
-}
-
-// RefuteContains checks for the non-existence of the second element
+// RefuteContains checks for the non-existence of the second argument
 // inside the first string, array or slice.
 //
 // Expects:
@@ -285,11 +275,35 @@ func (t *GoT) RefuteHas(args ...interface{}) {
     t.refuteContains("RefuteHas", args...)
 }
 
-// refuteContains is the real assertion, allowing for aliasing.
-func (t *GoT) refuteContains(name string, args ...interface{}) {
-    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to not contain \"%v\"", args...), args...)
-    if pass, _ := contains(args[0], args[1]); pass {
-        t.error(msg, 3)
+// AssertHasKey checks for the existence of the second argument
+// as a key for the first argument; supports maps only.
+//
+// Expects:
+//
+//   RefuteContains(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) AssertHasKey(args ...interface{}) {
+    msg := message(3, fmt.Sprintf("AssertHasKey expected key %v", args[1]), args...)
+
+    if pass, err := hasKey(args[0], args[1]); !pass && err != "" {
+        t.error(err)
+    } else if !pass {
+        t.error(msg)
+    }
+}
+
+// RefuteHasKey checks for the existence of the second argument
+// as a key for the first argument; supports maps only.
+//
+// Expects:
+//
+//   RefuteContains(a interface{}, b interface{}, optional_message string)
+//
+func (t *GoT) RefuteHasKey(args ...interface{}) {
+    msg := message(3, fmt.Sprintf("RefuteHasKey did not expect key %v", args[1]), args...)
+
+    if pass, _ := hasKey(args[0], args[1]); pass {
+        t.error(msg)
     }
 }
 
@@ -375,7 +389,7 @@ func isNil(a interface{}) bool {
 }
 
 // checkLen is a helper method for checking length.
-func checkLen(a interface{}, n int) (pass bool, err string) {
+func checkLen(a interface{}, n int) (bool, string) {
     value := reflect.ValueOf(a)
     switch value.Kind() {
     case reflect.Map, reflect.Array, reflect.Slice, reflect.Chan, reflect.String:
@@ -413,4 +427,34 @@ func contains(a interface{}, b interface{}) (check bool, err string) {
     }
 
     return false, ""
+}
+
+// assertContains is the real assertion, allowing for aliasing.
+func (t *GoT) assertContains(name string, args ...interface{}) {
+    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to contain \"%v\"", args...), args...)
+    if pass, err := contains(args[0], args[1]); !pass && err != "" {
+        t.error(err, 3)
+    } else if !pass {
+        t.error(msg, 3)
+    }
+}
+
+// refuteContains is the real assertion, allowing for aliasing.
+func (t *GoT) refuteContains(name string, args ...interface{}) {
+    msg := message(3, fmt.Sprintf(name+" expected \"%v\" to not contain \"%v\"", args...), args...)
+    if pass, _ := contains(args[0], args[1]); pass {
+        t.error(msg, 3)
+    }
+}
+
+// hasKey is a helper to check to see if a map has a key.
+func hasKey(m interface{}, a interface{}) (check bool, err string) {
+    defer func() {
+        if catch := recover(); catch != nil {
+            check = false
+            err = fmt.Sprint(catch)
+        }
+    }()
+
+    return reflect.ValueOf(m).MapIndex(reflect.ValueOf(a)).IsValid(), ""
 }
