@@ -1,7 +1,7 @@
 
 # GoTest
 
-[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT)
+[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
 
 <center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
 

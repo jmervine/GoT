@@ -363,9 +363,8 @@ func CheckLen(a interface{}, n int) (bool, string) {
     switch value.Kind() {
     case reflect.Map, reflect.Array, reflect.Slice, reflect.Chan, reflect.String:
         return value.Len() == n, ""
-    default:
-        return false, "obtained value type has no length"
     }
+    return false, "obtained value type has no length"
 }
 
 // Contains checks to see if the string, array or slice passed in the first
