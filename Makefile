@@ -1,5 +1,5 @@
 # tests without -tabs for go tip
-travis: get .PHONY
+travis: .PHONY
 	# Run Test Suite
 	go test -test.v=true
 
