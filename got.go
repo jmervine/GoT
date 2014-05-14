@@ -21,9 +21,7 @@ Setup Examples:
 
     // or just the helpers //
     func TestBar(t *testing.T) {
-        if ok, err := GoT.Equal("a", "a"); err != "" {
-            t.Error(err)
-        } else if {
+        if GoT.Equal("a", "a") {
             t.Error("expected equality")
         }
     }
@@ -50,7 +48,7 @@ Setup Examples:
         "testing"
     )
 
-    var Go (func (*testing.T) *GoT.GoT) = GoT.Go
+    var Go = GoT.Go
 
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
@@ -123,14 +121,12 @@ func (t *GoT) Refute(args ...interface{}) {
 //
 // Expects:
 //
-//   AssertEqual(a interface{}, b interface{}, optional_message string)
+//   AssertEqual(a, b interface{}, optional_message string)
 //
 func (t *GoT) AssertEqual(args ...interface{}) {
     msg := message(3, fmt.Sprintf("AssertEqual expected %v == %v", args...), args...)
 
-    if pass, err := Equal(args[0], args[1]); err != "" {
-        t.error(err)
-    } else if !pass {
+    if !Equal(args[0], args[1]) {
         t.error(msg)
     }
 }
@@ -139,14 +135,12 @@ func (t *GoT) AssertEqual(args ...interface{}) {
 //
 // Expects:
 //
-//   RefuteEqual(a interface{}, b interface{}, optional_message string)
+//   RefuteEqual(a, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteEqual(args ...interface{}) {
     msg := message(3, fmt.Sprintf("RefuteEqual expected %v != %v", args...), args...)
 
-    if pass, err := Equal(args[0], args[1]); err != "" {
-        t.error(err)
-    } else if pass {
+    if Equal(args[0], args[1]) {
         t.error(msg)
     }
 }
@@ -157,7 +151,7 @@ func (t *GoT) RefuteEqual(args ...interface{}) {
 //
 // Expects:
 //
-//   AssertDeepEqual(a interface{}, b interface{}, optional_message string)
+//   AssertDeepEqual(a, b interface{}, optional_message string)
 //
 func (t *GoT) AssertDeepEqual(args ...interface{}) {
     msg := message(3, "AssertDeepEqual expected deep equal check to succeed", args...)
@@ -173,7 +167,7 @@ func (t *GoT) AssertDeepEqual(args ...interface{}) {
 //
 // Expects:
 //
-//   RefuteDeepEqual(a interface{}, b interface{}, optional_message string)
+//   RefuteDeepEqual(a, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteDeepEqual(args ...interface{}) {
     msg := message(3, "RefuteDeepEqual expected deep equal check to fail", args...)
@@ -257,7 +251,7 @@ func (t *GoT) RefuteLength(args ...interface{}) {
 //
 // Expects:
 //
-//   AssertContains(a interface{}, b interface{}, optional_message string)
+//   AssertContains(a, b interface{}, optional_message string)
 //
 func (t *GoT) AssertContains(args ...interface{}) {
     t.assertContains("AssertContains", args...)
@@ -273,7 +267,7 @@ func (t *GoT) AssertHas(args ...interface{}) {
 //
 // Expects:
 //
-//   RefuteContains(a interface{}, b interface{}, optional_message string)
+//   RefuteContains(a, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteContains(args ...interface{}) {
     t.refuteContains("RefuteContains", args...)
@@ -289,7 +283,7 @@ func (t *GoT) RefuteHas(args ...interface{}) {
 //
 // Expects:
 //
-//   RefuteContains(a interface{}, b interface{}, optional_message string)
+//   RefuteContains(a, b interface{}, optional_message string)
 //
 func (t *GoT) AssertHasKey(args ...interface{}) {
     msg := message(3, fmt.Sprintf("AssertHasKey expected key %v", args[1]), args...)
@@ -306,7 +300,7 @@ func (t *GoT) AssertHasKey(args ...interface{}) {
 //
 // Expects:
 //
-//   RefuteContains(a interface{}, b interface{}, optional_message string)
+//   RefuteContains(a, b interface{}, optional_message string)
 //
 func (t *GoT) RefuteHasKey(args ...interface{}) {
     msg := message(3, fmt.Sprintf("RefuteHasKey did not expect key %v", args[1]), args...)
@@ -327,19 +321,24 @@ func (t *GoT) RefuteHasKey(args ...interface{}) {
  ***************************************************/
 
 // Equal is used for checking equality.
-func Equal(a interface{}, b interface{}) (check bool, err string) {
-    defer func() {
-        if catch := recover(); catch != nil {
-            check = false
-            err = fmt.Sprint(catch)
-        }
-    }()
+func Equal(a, b interface{}) bool {
+    if DeepEqual(a, b) {
+        return true
+    }
 
-    return a == b, ""
+    if reflect.ValueOf(a) == reflect.ValueOf(b) {
+        return true
+    }
+
+    if fmt.Sprintf("%#v", a) == fmt.Sprintf("%#v", b) {
+        return true
+    }
+
+    return false
 }
 
 // DeepEqual calls reflect.DeepEqual, exporting for constancy only.
-func DeepEqual(a interface{}, b interface{}) bool {
+func DeepEqual(a, b interface{}) bool {
     return reflect.DeepEqual(a, b)
 }
 
@@ -371,7 +370,7 @@ func CheckLen(a interface{}, n int) (bool, string) {
 // argument contains the correctly typed value of the second argument. If the type
 // passed is unsupported or some panic occurs while performing the check, a message
 // will be returned as a string.
-func Contains(a interface{}, b interface{}) (check bool, err string) {
+func Contains(a, b interface{}) (check bool, err string) {
     defer func() {
         if catch := recover(); catch != nil {
             check = false
@@ -402,7 +401,7 @@ func Contains(a interface{}, b interface{}) (check bool, err string) {
 // HasKey checks to see if the map passed via the first argument has the
 // correctly typed argument of the the second. Panics due to type mismatches
 // will be passed back as an error string.
-func HasKey(m interface{}, a interface{}) (check bool, err string) {
+func HasKey(m, a interface{}) (check bool, err string) {
     defer func() {
         if catch := recover(); catch != nil {
             check = false

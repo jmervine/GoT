@@ -35,9 +35,7 @@ Setup Examples:
     }
     // or just the helpers //
     func TestBar(t *testing.T) {
-        if ok, err := GoT.Equal("a", "a"); err != "" {
-            t.Error(err)
-        } else if {
+        if GoT.Equal("a", "a") {
             t.Error("expected equality")
         }
     }
@@ -58,7 +56,7 @@ Setup Examples:
         "github.com/jmervine/GoT"
         "testing"
     )
-    var Go (func (*testing.T) *GoT.GoT) = GoT.Go
+    var Go = GoT.Go
     func TestFoo(T *testing.T) {
        Go(T).Assert(true, "should be true")
        Go(T).Refute(false)
@@ -132,7 +130,7 @@ string, array or slice.
 
 Expects:
 
-    AssertContains(a interface{}, b interface{}, optional_message string)
+    AssertContains(a, b interface{}, optional_message string)
 
 
 
@@ -159,7 +157,7 @@ custom messaging on this one, otherwise failure output will be ambigous.
 
 Expects:
 
-    AssertDeepEqual(a interface{}, b interface{}, optional_message string)
+    AssertDeepEqual(a, b interface{}, optional_message string)
 
 
 
@@ -184,7 +182,7 @@ AssertEqual check for equality.
 
 Expects:
 
-    AssertEqual(a interface{}, b interface{}, optional_message string)
+    AssertEqual(a, b interface{}, optional_message string)
 
 
 
@@ -216,7 +214,7 @@ first argument; supports maps only.
 
 Expects:
 
-    RefuteContains(a interface{}, b interface{}, optional_message string)
+    RefuteContains(a, b interface{}, optional_message string)
 
 
 
@@ -306,7 +304,7 @@ first string, array or slice.
 
 Expects:
 
-    RefuteContains(a interface{}, b interface{}, optional_message string)
+    RefuteContains(a, b interface{}, optional_message string)
 
 
 
@@ -334,7 +332,7 @@ ambigous.
 
 Expects:
 
-    RefuteDeepEqual(a interface{}, b interface{}, optional_message string)
+    RefuteDeepEqual(a, b interface{}, optional_message string)
 
 
 
@@ -359,7 +357,7 @@ RefuteEqual checks for inequality.
 
 Expects:
 
-    RefuteEqual(a interface{}, b interface{}, optional_message string)
+    RefuteEqual(a, b interface{}, optional_message string)
 
 
 
@@ -391,7 +389,7 @@ first argument; supports maps only.
 
 Expects:
 
-    RefuteContains(a interface{}, b interface{}, optional_message string)
+    RefuteContains(a, b interface{}, optional_message string)
 
 
 
@@ -482,7 +480,7 @@ stating such and the check fails.
 #### Contains
 
 ```go
-func Contains(a interface{}, b interface{}) (check bool, err string)
+func Contains(a, b interface{}) (check bool, err string)
 ```
 Contains checks to see if the string, array or slice passed in the first
 argument contains the correctly typed value of the second argument. If the type
@@ -505,7 +503,7 @@ will be returned as a string.
 #### DeepEqual
 
 ```go
-func DeepEqual(a interface{}, b interface{}) bool
+func DeepEqual(a, b interface{}) bool
 ```
 DeepEqual calls reflect.DeepEqual, exporting for constancy only.
 
@@ -522,7 +520,7 @@ DeepEqual calls reflect.DeepEqual, exporting for constancy only.
 #### Equal
 
 ```go
-func Equal(a interface{}, b interface{}) (check bool, err string)
+func Equal(a, b interface{}) bool
 ```
 Equal is used for checking equality.
 
@@ -532,16 +530,14 @@ Equal is used for checking equality.
 	// t comes from:
 	//
 	//     func TestFoo(t *testing.T)
-	if pass, err := Equal("a", "a"); err != "" {
-	    t.Error(err)
-	} else if !pass {
+	if !Equal("a", "a") {
 	    t.Error("a should equal a")
 	}
 
 #### HasKey
 
 ```go
-func HasKey(m interface{}, a interface{}) (check bool, err string)
+func HasKey(m, a interface{}) (check bool, err string)
 ```
 HasKey checks to see if the map passed via the first argument has the correctly
 typed argument of the the second. Panics due to type mismatches will be passed

@@ -1,11 +1,11 @@
 # tests without -tabs for go tip
 travis: .PHONY
 	# Run Test Suite
-	go test -test.v=true
+	go test -test.v
 
 test: format .PHONY
 	# Run Test Suite
-	go test -test.v=true
+	go test -test.v
 
 quiet/test: .PHONY
 	go test

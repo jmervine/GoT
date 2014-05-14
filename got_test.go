@@ -2,7 +2,6 @@ package GoT
 
 import (
     "fmt"
-    "strings"
     "testing"
 )
 
@@ -470,30 +469,16 @@ func TestRefuteHasKey(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-    pass, msg := Equal("a", "a")
-
-    if !pass {
+    if !Equal("a", "a") {
         t.Error("expected equal to pass")
     }
 
-    if msg != "" {
-        t.Error("expected msg to be empty")
+    if !Equal(-1, -1) {
+        t.Error("expected equal to pass")
     }
 
-    pass, msg = Equal("a", "b")
-    if pass {
+    if Equal("a", "b") {
         t.Error("expected equal to fail")
-    }
-    if msg != "" {
-        t.Error("expected msg to be empty")
-    }
-
-    pass, msg = Equal([]string{"a"}, []string{"a"})
-    if pass {
-        t.Error("expected equal to fail")
-    }
-    if !strings.Contains(msg, "runtime error: comparing uncomparable type") {
-        t.Error("expected msg to have run time error")
     }
 }
 
@@ -942,9 +927,7 @@ func ExampleEqual() {
     // t comes from:
     //
     //     func TestFoo(t *testing.T)
-    if pass, err := Equal("a", "a"); err != "" {
-        t.Error(err)
-    } else if !pass {
+    if !Equal("a", "a") {
         t.Error("a should equal a")
     }
 }
