@@ -781,15 +781,6 @@ func Test_Contains(t *testing.T) {
 var T = new(testing.T)
 var t = new(testing.T)
 
-func Example() {
-    // T comes from:
-    //
-    //     func TestFoo(T *testing.T)
-
-    Go(T).Assert(true)
-    Go(T).Assert(true, "should be true")
-}
-
 func ExampleGoT_Assert() {
     // T comes from:
     //

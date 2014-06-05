@@ -63,16 +63,8 @@ Setup Examples:
 
 Note: In assertions, if no message is passed, then a nice message will be
 displayed in an effor to be as clear as possible.
-```go
-    // Example:
-	// T comes from:
-	//
-	//     func TestFoo(T *testing.T)
-	
-	Go(T).Assert(true)
-	Go(T).Assert(true, "should be true")
 
-```
+
 ### Types
 
 #### GoT

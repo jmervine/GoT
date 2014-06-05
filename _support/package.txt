@@ -21,9 +21,11 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 import "github.com/jmervine/GoT"
 ```
 {{else}}
-{{end}}{{comment_text .Doc "" "    "}}```go
+{{end}}{{comment_text .Doc "" "    "}}
+{{if example_text $ "" ""}}```go
 {{example_text $ "" "    // "}}
-```{{/*
+```
+{{end}}{{/*
 
 ---------------------------------------
 
