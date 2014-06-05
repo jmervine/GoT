@@ -66,18 +66,18 @@ import "github.com/jmervine/GoT"
 {{comment_text .Doc "> " ""}}
 {{end}}
 {{range .Vars}}{{node $ .Decl}}
-{{comment_text .Doc "> " ""}}```go
+{{comment_text .Doc "> " ""}}{{if example_text $ .Name ""}}```go
 {{example_text $ .Name "    // "}}
-```
+```{{end}}
 {{end}}
 {{range .Funcs}}#### {{.Name}}
 ```go
 {{node $ .Decl}}
 ```
 {{comment_text .Doc "> " ""}}
-```go
+{{if example_text $ .Name ""}}```go
 {{example_text $ .Name "    // "}}
-```
+```{{end}}
 {{end}}{{range .Methods}}{{/* methods */}}#### {{.Name}}
 ```go
 {{node $ .Decl}}
@@ -97,9 +97,9 @@ import "github.com/jmervine/GoT"
 ```go
 {{node $ .Decl}}
 ```
-{{comment_text .Doc "> " ""}}```go
+{{comment_text .Doc "> " ""}}{{if example_text $ .Name ""}}```go
 {{example_text $ .Name "    // "}}
-```
+```{{end}}
 {{end}}{{end}}{{/*
 
 ---------------------------------------
