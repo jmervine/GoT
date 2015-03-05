@@ -1,6 +1,8 @@
 
 # GoTest
 
+[![Join the chat at https://gitter.im/jmervine/GoT](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jmervine/GoT?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
 
 <center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
