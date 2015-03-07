@@ -3,7 +3,7 @@
 
 [![Join the chat at https://gitter.im/jmervine/GoT](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jmervine/GoT?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
+[![GoDoc](https://godoc.org/github.com/jmervine/GoT/v1?status.png)](https://godoc.org/github.com/jmervine/GoT/v1) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
 
 <center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
 
@@ -16,7 +16,7 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 ## [Documentation](https://godoc.org/github.com/jmervine/GoT)
 
 ```go
-import "github.com/jmervine/GoT"
+import "github.com/jmervine/GoT/v1"
 ```
 Package GoT is a simple assertion wrapper for Go's built in "testing" package,
 which is designed to be as simple and unintrusive as possible while adding basic
@@ -88,10 +88,10 @@ func Go(T *testing.T) *GoT
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
-	
+
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
@@ -112,7 +112,7 @@ Assert(a bool, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Assert(true)
 	Go(T).Assert(true, "should be true")
 
@@ -135,11 +135,11 @@ AssertContains(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertContains("asdf", "a")
 	Go(T).AssertContains([1]int{1}, 1)
 	Go(T).AssertContains([]int{1}, 1)
-	
+
 	// Alias:
 	Go(T).AssertHas("asdf", "a")
 
@@ -163,10 +163,10 @@ AssertDeepEqual(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	a1 := []string{"a"}
 	a2 := []string{"a"}
-	
+
 	Go(T).AssertDeepEqual(a1, a2)
 	Go(T).AssertDeepEqual(a1, a2, "should deep equal")
 
@@ -188,7 +188,7 @@ AssertEqual(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertEqual(1, 1)
 	Go(T).AssertEqual(1, 1, "should equal")
 
@@ -219,7 +219,7 @@ RefuteContains(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertHasKey(map[string]string{"a": "a"}, "a")
 	Go(T).AssertHasKey(map[int]string{1: "a"}, 1)
 
@@ -242,7 +242,7 @@ AssertLength(a interface{}, n int, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertLength("a", 1)
 	Go(T).AssertLength("a", 1, "should be length")
 
@@ -264,7 +264,7 @@ AssertNil(a interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).AssertNil(nil)
 	Go(T).AssertNil(nil, "should be nil")
 
@@ -286,7 +286,7 @@ Refute(a bool, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).Refute(false)
 	Go(T).Refute(false, "should not be true")
 
@@ -309,11 +309,11 @@ RefuteContains(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteContains("asdf", "q")
 	Go(T).RefuteContains([1]int{1}, 2)
 	Go(T).RefuteContains([]int{1}, 2)
-	
+
 	// Alias:
 	Go(T).RefuteHas("asdf", "q")
 
@@ -337,10 +337,10 @@ RefuteDeepEqual(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	a1 := []string{"a"}
 	a2 := []string{"b"}
-	
+
 	Go(T).RefuteDeepEqual(a1, a2)
 	Go(T).RefuteDeepEqual(a1, a2, "should not deep equal")
 
@@ -362,7 +362,7 @@ RefuteEqual(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteEqual(1, 2)
 	Go(T).RefuteEqual(1, 2, "should not equal")
 
@@ -393,7 +393,7 @@ RefuteContains(a, b interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteHasKey(map[string]string{"a": "a"}, "b")
 	Go(T).RefuteHasKey(map[int]string{1: "a"}, 2)
 
@@ -417,7 +417,7 @@ RefuteLength(a interface{}, n int, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteLength("a", 0)
 	Go(T).RefuteLength("a", 0, "should not be length")
 
@@ -439,7 +439,7 @@ RefuteNil(a interface{}, optional_message string)
 	// T comes from:
 	//
 	//     func TestFoo(T *testing.T)
-	
+
 	Go(T).RefuteNil(1)
 	Go(T).RefuteNil(1, "should not be nil")
 
@@ -466,10 +466,10 @@ func CheckLen(a interface{}, n int) (bool, string)
 	} else if !pass {
 	    t.Error("should have len of one")
 	}
-	
+
 	_, err := CheckLen(1, 1)
 	fmt.Println(err)
-	
+
 	// Output:
 	// obtained value type has no length
 
