@@ -3,7 +3,7 @@ travis: .PHONY
 	# Run Test Suite
 	go test -test.v
 
-test: format .PHONY
+test: .PHONY
 	# Run Test Suite
 	go test -test.v
 
@@ -16,16 +16,12 @@ functional: .PHONY
 quiet/functional: .PHONY
 	cd _example; go test
 
-build: format quiet/test quiet/functional .PHONY
+build: quiet/test quiet/functional .PHONY
 	go build -o 'pkg/got' -v -a -race
 
-readme: format quiet/test quiet/functional .PHONY
+readme: quiet/test quiet/functional .PHONY
 	# generating readme
 	godoc -ex -v -templates "$(PWD)/_support" . > README.md
-
-format: .PHONY
-	# Gofmt Source
-	gofmt -tabs=false -tabwidth=4 -w=true -l=true *.go
 
 .PHONY:
 
