@@ -5,7 +5,7 @@
 */}}{{with .PDoc}}{{if not $.IsMain}}
 # GoTest
 
-[![GoDoc](https://godoc.org/github.com/jmervine/GoT?status.png)](https://godoc.org/github.com/jmervine/GoT) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
+[![GoDoc](https://godoc.org/gopkg.in/jmervine/GoT.v1?status.png)](https://godoc.org/gopkg.in/jmervine/GoT.v1) [![Build Status](https://travis-ci.org/jmervine/GoT.svg?branch=master)](https://travis-ci.org/jmervine/GoT)
 
 <center>![GoT](http://cdn.mervine.net/GoT.jpg)</center>
 
@@ -15,10 +15,10 @@ GoT is designed to be as simple and unintrusive as possible while adding basic A
 
 ##### See [examples](_example) for detailed assertion usage.
 
-## [Documentation](https://godoc.org/github.com/jmervine/GoT)
+## [Documentation](https://godoc.org/gopkg.in/jmervine/GoT.v1)
 
 ```go
-import "github.com/jmervine/GoT"
+import "gopkg.in/jmervine/GoT.v1"
 ```
 {{else}}
 {{end}}{{comment_text .Doc "" "    "}}
