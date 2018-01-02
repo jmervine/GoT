@@ -1,3 +1,5 @@
+> ## Archived in favor of https://github.com/stretchr/testify
+
 
 # GoTest
 
